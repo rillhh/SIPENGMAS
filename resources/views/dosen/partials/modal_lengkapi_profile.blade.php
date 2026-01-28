@@ -1,6 +1,6 @@
 @if ($showProfileModal)
-    <div class="modal fade" id="modalLengkapiProfile" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalLengkapiProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -44,7 +44,7 @@
                                 onchange="updateProdiModal()" required>
                                 <option value="" disabled selected>Pilih Fakultas</option>
                                 {{-- Loop Data --}}
-                                @foreach($fakultas as $f)
+                                @foreach ($fakultas as $f)
                                     <option value="{{ $f->nama }}">{{ $f->nama }}</option>
                                 @endforeach
                             </select>
@@ -64,7 +64,7 @@
                             <select class="form-select" id="jabatan_fungsional" name="jabatan_fungsional" required>
                                 <option value="" disabled selected>Pilih Jabatan</option>
                                 {{-- Loop Data --}}
-                                @foreach($jabatans as $j)
+                                @foreach ($jabatans as $j)
                                     <option value="{{ $j->nama }}">{{ $j->nama }}</option>
                                 @endforeach
                             </select>

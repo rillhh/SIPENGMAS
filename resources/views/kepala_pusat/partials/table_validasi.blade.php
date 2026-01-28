@@ -11,20 +11,15 @@
                     <th class="ps-4 py-3 text-secondary" style="width: 50px;">No</th>
                     <th class="py-3 text-secondary">Judul & Pengusul</th>
                     <th class="text-center py-3 text-secondary">Tahun</th>
-                    
-                    {{-- Logic Header per Tab --}}
-                    @if($type == 'ditolak')
+                    @if ($type == 'ditolak')
                         <th class="py-3 text-secondary">Alasan Penolakan</th>
                     @else
                         <th class="text-center py-3 text-secondary">Dana</th>
                         <th class="text-center py-3 text-secondary">Status</th>
-                        
-                        {{-- Kolom Aksi Hanya di Tab Menunggu --}}
-                        @if($type == 'menunggu') 
-                            <th class="text-center py-3 text-secondary" style="width: 180px;">Aksi</th> 
+                        @if ($type == 'menunggu')
+                            <th class="text-center py-3 text-secondary" style="width: 180px;">Aksi</th>
                         @endif
                     @endif
-
                     <th class="text-center py-3 text-secondary" style="width: 100px;">Detail</th>
                 </tr>
             </thead>
@@ -33,18 +28,17 @@
                     <tr class="border-bottom">
                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
                         <td class="py-3" style="max-width: 350px;">
-                            <span class="fw-bold text-dark d-block text-truncate" title="{{ $prop->identitas->judul ?? '' }}">
+                            <span class="fw-bold text-dark d-block text-truncate"
+                                title="{{ $prop->identitas->judul ?? '' }}">
                                 {{ $prop->identitas->judul ?? 'Tanpa Judul' }}
                             </span>
                             <div class="small text-muted mt-1 d-flex align-items-center">
-                                <i class="bi bi-person-circle me-1"></i> 
+                                <i class="bi bi-person-circle me-1"></i>
                                 <span class="ms-1">{{ $prop->user->name ?? '-' }}</span>
                             </div>
                         </td>
                         <td class="text-center py-3 fw-bold">{{ $prop->tahun_pelaksanaan }}</td>
-
-                        {{-- Logic Kolom Tengah (Status/Dana/Aksi) --}}
-                        @if($type == 'ditolak')
+                        @if ($type == 'ditolak')
                             <td class="py-3 small text-muted text-truncate" style="max-width: 250px;">
                                 {{ $prop->feedback ?? '-' }}
                             </td>
@@ -53,34 +47,31 @@
                                 Rp {{ number_format($prop->total_dana ?? 0, 0, ',', '.') }}
                             </td>
                             <td class="text-center py-3">
-                                @if($type == 'menunggu') 
+                                @if ($type == 'menunggu')
                                     <span class="badge status-menunggu rounded-pill px-3">Perlu Validasi</span>
-                                @elseif($type == 'disetujui') 
+                                @elseif($type == 'disetujui')
                                     <span class="badge status-selesai rounded-pill px-3">Disetujui</span>
                                 @endif
                             </td>
-                            
-                            {{-- Tombol Aksi (Hanya di Menunggu) --}}
-                            @if($type == 'menunggu')
+                            @if ($type == 'menunggu')
                                 <td class="text-center py-3">
                                     <div class="d-flex justify-content-center gap-1">
                                         {{-- Tombol Setuju (Modal di file utama) --}}
-                                        <button class="btn btn-sm btn-success rounded-pill px-3 shadow-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalApprove{{ $prop->id }}">Setuju</button>
-                                        
+                                        <button class="btn btn-sm btn-success rounded-pill px-3 shadow-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalApprove{{ $prop->id }}">Setuju</button>
+
                                         {{-- Tombol Tolak (Modal di file utama) --}}
-                                        <button class="btn btn-sm btn-danger rounded-pill px-3 shadow-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalReject{{ $prop->id }}">Tolak</button>
+                                        <button class="btn btn-sm btn-danger rounded-pill px-3 shadow-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalReject{{ $prop->id }}">Tolak</button>
                                     </div>
                                 </td>
                             @endif
                         @endif
-                        
-                        {{-- TOMBOL DETAIL (INILAH YANG DIUPDATE) --}}
                         <td class="text-center py-3">
-                            <a href="{{ route('kepala_pusat.validasi.detail', $prop->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
+                            <a href="{{ route('kepala_pusat.validasi.detail', $prop->id) }}"
+                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
                                 Detail
                             </a>
                         </td>
@@ -89,8 +80,6 @@
             </tbody>
         </table>
     </div>
-    
-    {{-- Pagination --}}
     <div class="mt-3 px-3">
         {{ $items->links('pagination::bootstrap-5') }}
     </div>

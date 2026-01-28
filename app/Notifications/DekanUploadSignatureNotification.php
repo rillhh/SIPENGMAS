@@ -12,12 +12,12 @@ class DekanUploadSignatureNotification extends Notification
 
     public function __construct()
     {
-        //
+        
     }
 
     public function via($notifiable)
     {
-        return ['database']; // Simpan ke tabel 'notifications'
+        return ['database'];
     }
 
     public function toArray($notifiable)
@@ -25,7 +25,7 @@ class DekanUploadSignatureNotification extends Notification
         return [
             'title' => 'Permintaan Tanda Tangan',
             'message' => 'Wakil Dekan 3 memerlukan tanda tangan digital Anda untuk memvalidasi proposal.',
-            'url' => route('profile.edit'), // Link ke halaman profil Dekan
+            'url' => route('profile.edit'),
             'icon' => 'bi-pen-fill',
             'color' => 'danger'
         ];

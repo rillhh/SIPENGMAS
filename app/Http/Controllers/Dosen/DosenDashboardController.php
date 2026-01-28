@@ -12,95 +12,60 @@ use App\Models\Fakultas;
 use App\Models\Jabatan;
 
 class DosenDashboardController extends Controller
-{  
+{
     public function index()
-    {   
+    {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $userId = $user->id;
         $userNidn = $user->nidn;
-
-        // =================================================================
-        // 1. STATISTIK: TOTAL PENGABDIAN DIDANAI (KETUA + ANGGOTA)
-        // =================================================================
-        
         $ketuaDidanai = Proposal::where('user_id', $userId)
             ->where('status_progress', 4)
             ->count();
-
         $anggotaDidanai = ProposalCoreAnggotaDosen::where('nidn', $userNidn)
             ->where('is_approved_dosen', 1)
-            ->whereHas('proposal', function($q) use ($userId) {
+            ->whereHas('proposal', function ($q) use ($userId) {
                 $q->where('user_id', '!=', $userId)->where('status_progress', 4);
             })
             ->count();
-
         $totalDidanai = $ketuaDidanai + $anggotaDidanai;
-
-        // =================================================================
-        // 2. STATISTIK: TOTAL SEMUA USULAN
-        // =================================================================
-        
         $countKetuaAll = Proposal::where('user_id', $userId)->count();
-
         $countAnggotaAll = ProposalCoreAnggotaDosen::where('nidn', $userNidn)
             ->where('is_approved_dosen', 1)
-            ->whereHas('proposal', function($q) use ($userId) {
+            ->whereHas('proposal', function ($q) use ($userId) {
                 $q->where('user_id', '!=', $userId);
             })
             ->count();
-
         $totalSemuaUsulan = $countKetuaAll + $countAnggotaAll;
-
-        // =================================================================
-        // 3. STATISTIK: LAMPIRAN
-        // =================================================================
-        
-        $lampiranCounts = ProposalLampiran::whereHas('proposal', function($q) use ($userId, $userNidn) {
+        $lampiranCounts = ProposalLampiran::whereHas('proposal', function ($q) use ($userId, $userNidn) {
             $q->where('user_id', $userId)
-              ->orWhereHas('anggotaDosen', function($subQ) use ($userNidn) {
-                  $subQ->where('nidn', $userNidn)->where('is_approved_dosen', 1);
-              });
+                ->orWhereHas('anggotaDosen', function ($subQ) use ($userNidn) {
+                    $subQ->where('nidn', $userNidn)->where('is_approved_dosen', 1);
+                });
         })
-        ->selectRaw('kategori, count(*) as total')
-        ->groupBy('kategori')
-        ->pluck('total', 'kategori');
-
-        // Susun Data Statistik
+            ->selectRaw('kategori, count(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori');
         $stats = [
             'pengabdian' => $totalDidanai,
-            'anggota'    => $totalSemuaUsulan, 
+            'anggota'    => $totalSemuaUsulan,
             'artikel'    => $lampiranCounts->get('artikel', 0),
             'sertifikat' => $lampiranCounts->get('sertifikat', 0),
             'hki'        => $lampiranCounts->get('hki', 0),
             'dokumen'    => $lampiranCounts->get('dokumen', 0),
         ];
-
-        // =================================================================
-        // 4. AMBIL PROPOSAL TERAKHIR (CLEAN CODE)
-        // =================================================================
-        // Tidak perlu lagi transformasi manual (skema_display, tgl_ajukan, dll).
-        // View akan mengakses langsung via Accessor Model ($lastProposal->skema_label).
-        
         $lastProposal = Proposal::with('identitas')
             ->where('user_id', $userId)
             ->latest()
             ->first();
-
-        // =================================================================
-        // 5. DATA PENDUKUNG
-        // =================================================================
         $showProfileModal = empty($user->fakultas) || empty($user->prodi);
         $kumpulanPanduan = Panduan::all();
-
         $fakultas = Fakultas::with('prodis')->get();
         $jabatans = Jabatan::all();
-
         $fakultasData = [];
-        foreach($fakultas as $f) {
+        foreach ($fakultas as $f) {
             $fakultasData[$f->nama] = $f->prodis->pluck('nama');
         }
-
-        return view('dosen.dosen_dashboard', compact('stats', 'lastProposal', 'showProfileModal', 'kumpulanPanduan', 'fakultas','jabatans','fakultasData'));
+        return view('dosen.dosen_dashboard', compact('stats', 'lastProposal', 'showProfileModal', 'kumpulanPanduan', 'fakultas', 'jabatans', 'fakultasData'));
     }
 }

@@ -29,17 +29,20 @@
         {{-- Tabs --}}
         <ul class="nav nav-tabs" id="validasiTab" role="tablist">
             <li class="nav-item">
-                <button class="nav-link active" id="menunggu-tab" data-bs-toggle="tab" data-bs-target="#menunggu-pane" type="button" onclick="setActiveTab('menunggu')">
+                <button class="nav-link active" id="menunggu-tab" data-bs-toggle="tab" data-bs-target="#menunggu-pane"
+                    type="button" onclick="setActiveTab('menunggu')">
                     Menunggu Validasi <span class="badge bg-warning text-dark ms-1">{{ $data['menunggu']->total() }}</span>
                 </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" id="disetujui-tab" data-bs-toggle="tab" data-bs-target="#disetujui-pane" type="button" onclick="setActiveTab('disetujui')">
+                <button class="nav-link" id="disetujui-tab" data-bs-toggle="tab" data-bs-target="#disetujui-pane"
+                    type="button" onclick="setActiveTab('disetujui')">
                     Disetujui <span class="badge bg-success ms-1">{{ $data['disetujui']->total() }}</span>
                 </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" id="ditolak-tab" data-bs-toggle="tab" data-bs-target="#ditolak-pane" type="button" onclick="setActiveTab('ditolak')">
+                <button class="nav-link" id="ditolak-tab" data-bs-toggle="tab" data-bs-target="#ditolak-pane" type="button"
+                    onclick="setActiveTab('ditolak')">
                     Ditolak <span class="badge bg-danger ms-1">{{ $data['ditolak']->total() }}</span>
                 </button>
             </li>
@@ -50,13 +53,22 @@
             <div class="card-body p-0">
                 <div class="tab-content" id="validasiTabContent">
                     <div class="tab-pane fade show active" id="menunggu-pane">
-                        @include('wakil_dekan3.partials.table_validasi', ['items' => $data['menunggu'], 'type' => 'menunggu'])
+                        @include('wakil_dekan3.partials.table_validasi', [
+                            'items' => $data['menunggu'],
+                            'type' => 'menunggu',
+                        ])
                     </div>
                     <div class="tab-pane fade" id="disetujui-pane">
-                        @include('wakil_dekan3.partials.table_validasi', ['items' => $data['disetujui'], 'type' => 'disetujui'])
+                        @include('wakil_dekan3.partials.table_validasi', [
+                            'items' => $data['disetujui'],
+                            'type' => 'disetujui',
+                        ])
                     </div>
                     <div class="tab-pane fade" id="ditolak-pane">
-                        @include('wakil_dekan3.partials.table_validasi', ['items' => $data['ditolak'], 'type' => 'ditolak'])
+                        @include('wakil_dekan3.partials.table_validasi', [
+                            'items' => $data['ditolak'],
+                            'type' => 'ditolak',
+                        ])
                     </div>
                 </div>
             </div>
@@ -64,7 +76,7 @@
     </div>
 
     {{-- MODAL ACTION LOOP --}}
-    @foreach($data['menunggu'] as $item)
+    @foreach ($data['menunggu'] as $item)
         {{-- 
             PERBAIKAN DISINI: 
             Ubah 'proposal' => $item MENJADI 'prop' => $item 
@@ -76,29 +88,43 @@
 @endsection
 
 @push('scripts')
-<script>
-    function changeYear(year) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('year', year);
-        window.location.href = url.toString();
-    }
-    function setActiveTab(tabName) {
-        const url = new URL(window.location);
-        url.searchParams.set('tab', tabName);
-        window.history.pushState({}, '', url);
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const activeTab = urlParams.get('tab') || 'menunggu';
-        const triggerEl = document.querySelector(`#${activeTab}-tab`);
-        if (triggerEl) { new bootstrap.Tab(triggerEl).show(); }
-    });
-</script>
+    <script>
+        function changeYear(year) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('year', year);
+            window.location.href = url.toString();
+        }
+
+        function setActiveTab(tabName) {
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabName);
+            window.history.pushState({}, '', url);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeTab = urlParams.get('tab') || 'menunggu';
+            const triggerEl = document.querySelector(`#${activeTab}-tab`);
+            if (triggerEl) {
+                new bootstrap.Tab(triggerEl).show();
+            }
+        });
+    </script>
 @endpush
 
 @push('styles')
     <style>
-        #validasiTab .nav-item .nav-link { color: #555 !important; background-color: #f8f9fa; border-bottom: none; margin-right: 2px; }
-        #validasiTab .nav-item .nav-link.active { color: #378a75 !important; background-color: #fff; border-color: #dee2e6 #dee2e6 #fff; font-weight: 600; }
+        #validasiTab .nav-item .nav-link {
+            color: #555 !important;
+            background-color: #f8f9fa;
+            border-bottom: none;
+            margin-right: 2px;
+        }
+
+        #validasiTab .nav-item .nav-link.active {
+            color: #378a75 !important;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+            font-weight: 600;
+        }
     </style>
 @endpush

@@ -7,14 +7,15 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('dosen.anggota.terima', $item->id) }}" method="POST">
-                @csrf 
+                @csrf
                 <div class="modal-body text-center p-4">
                     <div class="mb-3" style="color: #378a75;"><i class="bi bi-person-check-fill fs-1"></i></div>
                     <p class="mb-1 text-muted">Anda bersedia bergabung dalam proposal ini?</p>
                     <h6 class="fw-bold text-dark">{{ $item->proposal->identitas->judul ?? 'Proposal ini' }}</h6>
                     <div class="mt-3 p-2 bg-light rounded border">
                         <small class="text-muted d-block">Total Dana Diajukan:</small>
-                        <span class="fw-bold text-success fs-5">Rp {{ number_format($item->proposal->total_dana ?? 0, 0, ',', '.') }}</span>
+                        <span class="fw-bold text-success fs-5">Rp
+                            {{ number_format($item->proposal->total_dana ?? 0, 0, ',', '.') }}</span>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-center border-0 pb-4">
@@ -35,7 +36,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('dosen.anggota.tolak', $item->id) }}" method="POST">
-                @csrf 
+                @csrf
                 <div class="modal-body p-4 text-center">
                     <div class="mb-3 text-danger"><i class="bi bi-x-circle fs-1"></i></div>
                     <p class="mb-1 text-muted">Anda yakin ingin menolak undangan ini?</p>

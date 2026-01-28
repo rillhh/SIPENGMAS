@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->foreignId('proposal_id')->constrained('proposal')->onDelete('cascade');
             $table->string('rumpun_ilmu', 50);
             $table->string('nama_institusi_mitra', 50);
-            $table->string('penanggung_jawab_mitra', 50);
+            $table->string('penanggung_jawab_mitra', 50)->nullable();;
             $table->string('alamat_mitra', 250);
             $table->timestamps();
         });

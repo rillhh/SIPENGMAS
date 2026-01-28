@@ -14,8 +14,7 @@
                     <th class="text-center py-3 text-secondary">Tahun</th>
                     <th class="text-end py-3 text-secondary">Total Dana</th>
 
-                    {{-- KOLOM DINAMIS BERDASARKAN TYPE --}}
-                    @if($type == 'ditolak')
+                    @if ($type == 'ditolak')
                         <th class="text-center py-3 text-secondary">Status</th>
                         <th class="py-3 text-secondary">Alasan Penolakan</th>
                     @else
@@ -29,13 +28,14 @@
                 @foreach ($items as $index => $prop)
                     <tr class="border-bottom">
                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
-                        
+
                         <td class="py-3" style="max-width: 350px;">
-                            <span class="fw-bold text-dark d-block text-truncate" title="{{ $prop->identitas->judul ?? '' }}">
+                            <span class="fw-bold text-dark d-block text-truncate"
+                                title="{{ $prop->identitas->judul ?? '' }}">
                                 {{ $prop->identitas->judul ?? 'Tanpa Judul' }}
                             </span>
                             <div class="small text-muted mt-1 d-flex align-items-center">
-                                <i class="bi bi-person-circle me-1"></i> 
+                                <i class="bi bi-person-circle me-1"></i>
                                 <span class="ms-1">{{ $prop->user->name ?? 'Pengusul' }}</span>
                             </div>
                         </td>
@@ -50,8 +50,7 @@
                             Rp {{ number_format($prop->total_dana, 0, ',', '.') }}
                         </td>
 
-                        {{-- ISI KOLOM DINAMIS --}}
-                        @if($type == 'ditolak')
+                        @if ($type == 'ditolak')
                             <td class="text-center py-3">
                                 <span class="badge bg-danger rounded-pill px-3">Ditolak</span>
                             </td>
@@ -67,7 +66,8 @@
                         @endif
 
                         <td class="text-center py-3">
-                            <a href="{{ route('dekan.monitoring.detail', $prop->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">
+                            <a href="{{ route('dekan.monitoring.detail', $prop->id) }}"
+                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">
                                 Detail
                             </a>
                         </td>
@@ -76,7 +76,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-3 px-3">
         {{ $items->links('pagination::bootstrap-5') }}
     </div>

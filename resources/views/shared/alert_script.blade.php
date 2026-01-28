@@ -5,8 +5,8 @@
             const container = document.getElementById('floating-alert-container');
             const msg = "{{ session('success') ?? session('error') }}";
             const type = "{{ session('success') ? 'success' : 'danger' }}";
-            
-            if(container && msg) {
+
+            if (container && msg) {
                 const alertDiv = document.createElement('div');
                 alertDiv.className = `alert alert-${type} shadow-lg alert-dismissible fade show`;
                 alertDiv.innerHTML = `

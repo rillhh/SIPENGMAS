@@ -21,7 +21,7 @@
             <h2 class="fw-bold text-primary">{{ $pageTitle }}</h2>
             <p class="text-muted mb-0">
                 @if (in_array($kategori, ['artikel', 'sertifikat', 'hki']))
-                     Menampilkan data tahun <strong>{{ $selectedYear }}</strong>.
+                    Menampilkan data tahun <strong>{{ $selectedYear }}</strong>.
                 @else
                     Daftar {{ strtolower($pageTitle) }} Anda.
                 @endif
@@ -36,17 +36,23 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="ps-4 py-3 text-secondary" style="width: 50px;">No</th>
-                                
+
                                 {{-- HEADER PROPOSAL --}}
-                                @if (in_array($kategori, ['pengabdian', 'anggota', 'semua_usulan']))
+                                @if (in_array($kategori, ['anggota', 'semua_usulan']))
+                                    <th class="py-3 text-secondary" style="width: 30%;">Judul & Pengusul</th>
+                                    <th class="py-3 text-secondary">Jenis Skema</th>
+                                    <th class="text-center py-3 text-secondary">Tahun</th>
+                                    <th class="text-end py-3 text-secondary">Pengajuan Dana</th>
+                                    <th class="text-center py-3 text-secondary">Status</th>
+                                    <th class="text-center py-3 text-secondary">Aksi</th>
+                                @elseif (in_array($kategori, ['pengabdian']))
                                     <th class="py-3 text-secondary" style="width: 30%;">Judul & Pengusul</th>
                                     <th class="py-3 text-secondary">Jenis Skema</th>
                                     <th class="text-center py-3 text-secondary">Tahun</th>
                                     <th class="text-end py-3 text-secondary">Dana Disetujui</th>
                                     <th class="text-center py-3 text-secondary">Status</th>
                                     <th class="text-center py-3 text-secondary">Aksi</th>
-
-                                {{-- HEADER LUARAN --}}
+                                    {{-- HEADER LUARAN --}}
                                 @else
                                     <th class="py-3 text-secondary" style="width: 25%;">Judul Proposal</th>
                                     <th class="py-3 text-secondary">Jenis Skema</th>
@@ -59,12 +65,11 @@
                         </thead>
                         <tbody>
                             @forelse($items as $index => $item)
-                                
                                 {{-- ISI PROPOSAL --}}
                                 @if (in_array($kategori, ['pengabdian', 'anggota', 'semua_usulan']))
                                     <tr class="border-bottom">
                                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
-                                        
+
                                         <td class="py-3">
                                             <div class="d-flex flex-column">
                                                 <span class="fw-bold text-dark mb-1 text-wrap" style="line-height: 1.4;">
@@ -75,17 +80,18 @@
                                                 </small>
                                             </div>
                                         </td>
-                                        
+
                                         {{-- Gunakan Accessor Model --}}
                                         <td class="py-3 text-dark small fw-bold">{{ $item->skemaRef->nama ?? '-' }}</td>
-                                                                                
-                                        <td class="text-center py-3 fw-bold text-secondary">{{ $item->tahun_pelaksanaan }}</td>
-                                        
+
+                                        <td class="text-center py-3 fw-bold text-secondary">{{ $item->tahun_pelaksanaan }}
+                                        </td>
+
                                         {{-- Gunakan Accessor Model --}}
                                         <td class="text-end py-3 fw-bold text-success font-monospace pe-4">
                                             Rp {{ number_format($item->total_dana, 0, ',', '.') }}
                                         </td>
-                                        
+
                                         <td class="text-center py-3">
                                             <span class="badge bg-{{ $item->status_color }} rounded-pill px-3">
                                                 {{ $item->status_label }}
@@ -93,44 +99,50 @@
                                         </td>
 
                                         <td class="text-center py-3">
-                                            <a href="{{ route('dosen.detail_proposal', $item->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">Detail</a>
+                                            <a href="{{ route('dosen.detail_proposal', $item->id) }}"
+                                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">Detail</a>
                                         </td>
                                     </tr>
 
-                                {{-- ISI LUARAN --}}
+                                    {{-- ISI LUARAN --}}
                                 @else
                                     <tr class="border-bottom">
                                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
-                                        
+
                                         <td class="py-3">
                                             <div class="d-flex flex-column">
-                                                <span class="fw-bold text-dark mb-1 text-truncate" style="max-width: 250px;" title="{{ $item->proposal->identitas->judul ?? '' }}">
+                                                <span class="fw-bold text-dark mb-1 text-truncate" style="max-width: 250px;"
+                                                    title="{{ $item->proposal->identitas->judul ?? '' }}">
                                                     {{ \Illuminate\Support\Str::limit($item->proposal->identitas->judul ?? '-', 50, '...') }}
                                                 </span>
                                                 <small class="text-muted">
-                                                    <i class="bi bi-person-circle me-1"></i> {{ $item->proposal->user->name ?? '-' }}
+                                                    <i class="bi bi-person-circle me-1"></i>
+                                                    {{ $item->proposal->user->name ?? '-' }}
                                                 </small>
                                             </div>
                                         </td>
 
-                                        <td class="py-3 text-dark small fw-bold">{{ $item->proposal->skema_label ?? '-' }}</td>
+                                        <td class="py-3 text-dark small fw-bold">{{ $item->proposal->skema_label ?? '-' }}
+                                        </td>
 
-                                        <td class="text-center py-3 fw-bold text-secondary">{{ $item->proposal->tahun_pelaksanaan ?? '-' }}</td>
+                                        <td class="text-center py-3 fw-bold text-secondary">
+                                            {{ $item->proposal->tahun_pelaksanaan ?? '-' }}</td>
 
                                         <td class="py-3 fw-bold text-primary" style="color: #378a75 !important;">
                                             {{ $item->judul }}
                                         </td>
-                                        
+
                                         <td class="text-center py-3">
-                                            <a href="{{ \Storage::url($item->file_path ?? '#') }}" target="_blank" class="btn btn-sm btn-outline-success fw-bold rounded-pill px-3">
+                                            <a href="{{ \Storage::url($item->file_path ?? '#') }}" target="_blank"
+                                                class="btn btn-sm btn-outline-success fw-bold rounded-pill px-3">
                                                 <i class="bi bi-download me-1"></i> Unduh
                                             </a>
                                         </td>
 
                                         <td class="text-center py-3">
-                                            <a href="{{ route('dosen.detail_proposal', $item->proposal_id) }}" 
-                                               class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm text-white" 
-                                               style="background-color: #378a75; border-color: #378a75;">
+                                            <a href="{{ route('dosen.detail_proposal', $item->proposal_id) }}"
+                                                class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm text-white"
+                                                style="background-color: #378a75; border-color: #378a75;">
                                                 Detail
                                             </a>
                                         </td>
@@ -156,13 +168,15 @@
                 <div class="card-footer bg-white py-3 border-top-0">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <div class="text-muted small">
-                            Menampilkan <strong>{{ $items->firstItem() }}</strong> - <strong>{{ $items->lastItem() }}</strong> dari <strong>{{ $items->total() }}</strong> data
+                            Menampilkan <strong>{{ $items->firstItem() }}</strong> -
+                            <strong>{{ $items->lastItem() }}</strong> dari <strong>{{ $items->total() }}</strong> data
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                             <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center me-2">
+                            <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center me-2">
                                 <input type="hidden" name="search" value="{{ $search ?? '' }}">
                                 <input type="hidden" name="year" value="{{ $selectedYear }}">
-                                <select name="per_page" class="form-select form-select-sm border-secondary text-secondary" style="width: 70px;" onchange="this.form.submit()">
+                                <select name="per_page" class="form-select form-select-sm border-secondary text-secondary"
+                                    style="width: 70px;" onchange="this.form.submit()">
                                     <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
                                     <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
                                     <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
@@ -180,11 +194,11 @@
 @endsection
 
 @push('scripts')
-<script>
-    function changeYear(year) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('year', year);
-        window.location.href = url.toString();
-    }
-</script>
+    <script>
+        function changeYear(year) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('year', year);
+            window.location.href = url.toString();
+        }
+    </script>
 @endpush

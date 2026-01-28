@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dosen; // Karena di luar folder Dosen
+namespace App\Http\Controllers\Dosen;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,14 +14,14 @@ class DosenLampiranProposalController extends Controller
         $request->validate([
             'kategori'    => 'required|in:dokumen,artikel,sertifikat,hki',
             'judul'       => 'required|string|max:255',
-            'file_upload' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // Tambahkan mimes gambar
+            'file_upload' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
         try {
             if ($request->hasFile('file_upload')) {
                 $file = $request->file('file_upload');
                 $fileName = $proposal_id . '_' . time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('lampiran', $fileName, 'public'); // Simpan ke storage/app/public/lampiran
-                DB::table('proposal_lampiran')->insert([    // Insert ke database
+                $path = $file->storeAs('lampiran', $fileName, 'public');
+                DB::table('proposal_lampiran')->insert([
                     'proposal_id' => $proposal_id,
                     'kategori'    => $request->kategori,
                     'judul'       => $request->judul,
@@ -31,7 +31,7 @@ class DosenLampiranProposalController extends Controller
                 ]);
                 return redirect()->back()->with('success', ucfirst($request->kategori) . ' berhasil disimpan!');
             }
-        } catch (\Exception $e) {    // Jika terjadi error, kirim pesan error agar tidak muncul Error 500 kosong
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
         return redirect()->back()->with('error', 'Gagal mengunggah file.');

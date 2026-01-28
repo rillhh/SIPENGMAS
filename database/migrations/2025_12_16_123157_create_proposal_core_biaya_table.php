@@ -12,9 +12,11 @@ return new class extends Migration {
             $table->foreignId('proposal_id')->constrained('proposal')->onDelete('cascade');
             $table->unsignedBigInteger('honor_output');
             $table->unsignedBigInteger('belanja_non_operasional');
-            $table->unsignedBigInteger('bahan_habis_pakai');
+            // $table->unsignedBigInteger('bahan_habis_pakai');
             $table->unsignedBigInteger('transportasi');
+            $table->unsignedBigInteger('lain_lain');
             $table->unsignedBigInteger('jumlah_tendik')->default(0);
+            $table->unsignedBigInteger('jumlah_mahasiswa')->default(0);
             $table->timestamps();
         });
     }

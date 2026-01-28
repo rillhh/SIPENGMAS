@@ -1,8 +1,3 @@
-{{-- 
-    FILE: resources/views/dosen/partials/table_anggota.blade.php
-    TERIMA: $items (Pagination Object), $type (string)
---}}
-
 @if ($items->isEmpty())
     <div class="d-flex flex-column align-items-center justify-content-center py-5">
         <img src="{{ asset('images/empty.png') }}" alt="Kosong" style="width: 150px; opacity: 0.5">
@@ -17,8 +12,9 @@
                     <th class="py-3 text-secondary">Judul & Pengusul</th>
                     <th class="py-3 text-secondary">Skema & Tahun</th>
                     <th class="text-center py-3 text-secondary">Pengajuan Dana</th>
-                    
-                    @if($type == 'invitation') {{-- TYPE INVITATION (UNDANGAN MASUK) --}}
+
+                    @if ($type == 'invitation')
+                        {{-- TYPE INVITATION (UNDANGAN MASUK) --}}
                         <th class="text-center py-3 text-secondary" style="width: 200px;">Konfirmasi</th>
                     @else
                         <th class="text-center py-3 text-secondary">Status Proposal</th>
@@ -34,21 +30,22 @@
 
                     <tr class="border-bottom">
                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
-                        
+
                         {{-- Judul & Pengusul --}}
                         <td class="py-3" style="max-width: 350px;">
-                            <span class="fw-bold text-dark d-block text-truncate" title="{{ $prop->identitas->judul ?? '' }}">
+                            <span class="fw-bold text-dark d-block text-truncate"
+                                title="{{ $prop->identitas->judul ?? '' }}">
                                 {{ $prop->identitas->judul ?? 'Tanpa Judul' }}
                             </span>
                             <div class="small text-muted mt-1 d-flex align-items-center">
-                                <i class="bi bi-person-circle me-1"></i> 
+                                <i class="bi bi-person-circle me-1"></i>
                                 <span class="ms-1">{{ $prop->user->name ?? '-' }}</span>
                             </div>
                         </td>
 
                         {{-- Skema & Tahun (Pakai Accessor) --}}
                         <td class="py-3">
-                            <span class="d-block text-dark fw-bold small">{{ $prop->skema_label }}</span>
+                            <span class="d-block text-dark fw-bold small">{{ $prop->skemaRef->nama ?? '-' }}</span>
                             <span class="text-muted small">Tahun: {{ $prop->tahun_pelaksanaan }}</span>
                         </td>
 
@@ -58,16 +55,16 @@
                         </td>
 
                         {{-- Kolom Aksi / Status --}}
-                        @if($type == 'invitation')
+                        @if ($type == 'invitation')
                             <td class="text-center py-3">
                                 <div class="d-flex justify-content-center gap-1">
-                                    <button class="btn btn-sm btn-success rounded-pill px-3 shadow-sm" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#modalTerima{{ $anggota->id }}">Terima</button>
-                                    
-                                    <button class="btn btn-sm btn-danger rounded-pill px-3 shadow-sm" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#modalTolak{{ $anggota->id }}">Tolak</button>
+                                    <button class="btn btn-sm btn-success rounded-pill px-3 shadow-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalTerima{{ $anggota->id }}">Terima</button>
+
+                                    <button class="btn btn-sm btn-danger rounded-pill px-3 shadow-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalTolak{{ $anggota->id }}">Tolak</button>
                                 </div>
                             </td>
                         @else
@@ -80,7 +77,8 @@
 
                         {{-- Tombol Detail --}}
                         <td class="text-center py-3">
-                            <a href="{{ route('dosen.detail_proposal', $prop->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
+                            <a href="{{ route('dosen.detail_proposal', $prop->id) }}"
+                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
                                 Detail
                             </a>
                         </td>
@@ -89,7 +87,7 @@
             </tbody>
         </table>
     </div>
-    
+
     {{-- Pagination --}}
     <div class="mt-3 px-3">
         {{ $items->links('pagination::bootstrap-5') }}

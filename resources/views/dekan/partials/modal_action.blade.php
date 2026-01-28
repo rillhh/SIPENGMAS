@@ -14,7 +14,8 @@
                     <h6 class="fw-bold text-dark">{{ $prop->identitas->judul ?? 'Proposal ini' }}</h6>
                     <div class="mt-3 p-2 bg-light rounded border">
                         <small class="text-muted d-block">Total Dana Diajukan:</small>
-                        <span class="fw-bold text-success fs-5">Rp {{ number_format($prop->total_dana, 0, ',', '.') }}</span>
+                        <span class="fw-bold text-success fs-5">Rp
+                            {{ number_format($prop->total_dana, 0, ',', '.') }}</span>
                     </div>
                     <input type="hidden" name="keputusan" value="terima">
                 </div>
@@ -44,7 +45,8 @@
                         <h6 class="fw-bold text-dark">{{ $prop->identitas->judul ?? 'Proposal ini' }}</h6>
                     </div>
                     <div class="text-start">
-                        <label for="feedback" class="form-label small fw-bold text-secondary">Alasan Penolakan <span class="text-danger">*</span></label>
+                        <label for="feedback" class="form-label small fw-bold text-secondary">Alasan Penolakan <span
+                                class="text-danger">*</span></label>
                         <textarea name="feedback" class="form-control" rows="4" placeholder="Jelaskan alasan..." required></textarea>
                     </div>
                     <input type="hidden" name="keputusan" value="tolak">

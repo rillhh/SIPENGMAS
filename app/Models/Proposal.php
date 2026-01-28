@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProposalLampiran;
 
 class Proposal extends Model
 {
@@ -73,6 +74,10 @@ class Proposal extends Model
     {
         return $this->hasOne(ProposalCorePengesahan::class, 'proposal_id');
     }
+    public function lampiran(): HasMany
+    {
+        return $this->hasMany(ProposalLampiran::class, 'proposal_id');
+    }
 
     // =========================================================================
     // ACCESSORS (VIRTUAL ATTRIBUTES)
@@ -90,8 +95,10 @@ class Proposal extends Model
 
         return $this->biaya->honor_output +
                $this->biaya->belanja_non_operasional +
-               $this->biaya->bahan_habis_pakai +
-               $this->biaya->transportasi;
+            //    $this->biaya->bahan_habis_pakai +
+               $this->biaya->transportasi +
+               $this->biaya->lain_lain;
+
     }
 
     /**

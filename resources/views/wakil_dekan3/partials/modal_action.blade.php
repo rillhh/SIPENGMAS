@@ -8,10 +8,10 @@
     use App\Models\User;
 
     // --- LOGIKA PENENTUAN BLOCKING TANDA TANGAN ---
-    
+
     // Default: Boleh Setuju (Aman)
-    $isSignatureAvailable = true; 
-    $targetRoleLabel = ''; 
+    $isSignatureAvailable = true;
+    $targetRoleLabel = '';
     $nextValidator = null;
 
     // 1. JIKA SKEMA PRODI -> WAJIB CEK TTD DEKAN
@@ -23,11 +23,11 @@
         if (!$nextValidator || empty($nextValidator->tanda_tangan)) {
             $isSignatureAvailable = false;
         }
-    } 
+    }
     // 2. JIKA SKEMA PUSAT -> LANGSUNG LOLOS (BYPASS)
     elseif ($prop->skala_pelaksanaan == 'Pusat') {
-        $targetRoleLabel = 'Kepala Pusat'; 
-        $isSignatureAvailable = true; 
+        $targetRoleLabel = 'Kepala Pusat';
+        $isSignatureAvailable = true;
     }
 @endphp
 
@@ -35,26 +35,27 @@
 <div class="modal fade" id="modalSetuju{{ $prop->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
-            
+
             <div class="modal-header border-0 bg-success text-white">
                 <h6 class="modal-title fw-bold">Konfirmasi Persetujuan</h6>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body text-center p-4">
-                
+
                 {{-- KONDISI 1: DEKAN SUDAH PUNYA TANDA TANGAN --}}
-                @if($isSignatureAvailable)
+                @if ($isSignatureAvailable)
                     <div class="mb-3 text-success">
                         <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
                     </div>
                     <h5 class="fw-bold text-dark">Setujui Proposal?</h5>
-                    <p class="text-muted small">Proposal akan diteruskan ke tahap selanjutnya ({{ $targetRoleLabel }}).</p>
-                    
+                    <p class="text-muted small">Proposal akan diteruskan ke tahap selanjutnya ({{ $targetRoleLabel }}).
+                    </p>
+
                     {{-- Alert Info jika Prodi --}}
-                    @if($prop->skala_pelaksanaan == 'Prodi')
+                    @if ($prop->skala_pelaksanaan == 'Prodi')
                         <div class="alert alert-success bg-success bg-opacity-10 border-0 small text-start">
-                            <i class="bi bi-pen-fill me-1"></i> 
+                            <i class="bi bi-pen-fill me-1"></i>
                             <strong>Tanda Tangan Dekan Tersedia.</strong><br>
                             Lembar pengesahan akan otomatis digenerate.
                         </div>
@@ -70,14 +71,15 @@
                             </button>
                         </div>
                     </form>
-                {{-- KONDISI 2: DEKAN BELUM PUNYA TANDA TANGAN --}}
+                    {{-- KONDISI 2: DEKAN BELUM PUNYA TANDA TANGAN --}}
                 @else
                     <div class="mb-3 text-warning">
                         <i class="bi bi-exclamation-triangle-fill" style="font-size: 3rem;"></i>
                     </div>
                     <h5 class="fw-bold text-dark">Tidak Dapat Memvalidasi</h5>
                     <p class="text-muted small mb-3">
-                        Anda tidak dapat menyetujui proposal ini karena <strong>Dekan belum mengunggah tanda tangan digital</strong>.
+                        Anda tidak dapat menyetujui proposal ini karena <strong>Dekan belum mengunggah tanda tangan
+                            digital</strong>.
                     </p>
 
                     <div class="alert alert-danger bg-danger bg-opacity-10 border-0 small text-start mb-4">
@@ -112,11 +114,11 @@
                 <h6 class="modal-title fw-bold">Konfirmasi Penolakan</h6>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            
+
             <form action="{{ route('wakil_dekan3.validasi.keputusan', $prop->id) }}" method="POST">
                 @csrf @method('PATCH')
                 <input type="hidden" name="keputusan" value="tolak">
-                
+
                 <div class="modal-body p-4">
                     <div class="text-center mb-3">
                         <div class="text-danger mb-2">
@@ -127,8 +129,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Alasan Penolakan <span class="text-danger">*</span></label>
-                        <textarea name="feedback" class="form-control bg-light" rows="4" placeholder="Contoh: RAB tidak rasional, Metode tidak jelas..." required></textarea>
+                        <label class="form-label small fw-bold">Alasan Penolakan <span
+                                class="text-danger">*</span></label>
+                        <textarea name="feedback" class="form-control bg-light" rows="4"
+                            placeholder="Contoh: RAB tidak rasional, Metode tidak jelas..." required></textarea>
                     </div>
 
                     <div class="d-grid">

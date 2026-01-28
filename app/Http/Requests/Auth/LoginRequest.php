@@ -11,9 +11,6 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -40,7 +37,7 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-        
+
         $credentials = [
             'cn' => $this->input('username'),
             'password' => $this->input('password'),
@@ -59,20 +56,14 @@ class LoginRequest extends FormRequest
         }
         RateLimiter::clear($this->throttleKey());
     }
-    
-    /**
-     * Ensure the login request is not rate limited.
-     */
+
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
-
         event(new Lockout($this));
-
         $seconds = RateLimiter::availableIn($this->throttleKey());
-
         throw ValidationException::withMessages([
             'username' => trans('auth.throttle', [
                 'seconds' => $seconds,
@@ -81,11 +72,8 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('username')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('username')) . '|' . $this->ip());
     }
 }

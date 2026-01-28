@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\File;
 
 // =========================================================================
 // CONTROLLER IMPORTS
@@ -44,19 +46,17 @@ use App\Http\Controllers\Dekan\DekanMonitoringController;
 use App\Http\Controllers\Dekan\DekanListStatistikController;
 use App\Http\Controllers\Dekan\DekanDetailProposalController;
 
-// Note: DekanListStatistikController belum ada di import asli, gunakan Dashboard atau buat controller baru jika perlu.
-
 // --- KEPALA PUSAT ---
 use App\Http\Controllers\KepalaPusat\KepalaPusatDashboardController;
 use App\Http\Controllers\KepalaPusat\KepalaPusatValidasiController;
-use App\Http\Controllers\KepalaPusat\KepalaPusatDetailProposalController; // Pastikan file ini dibuat
-use App\Http\Controllers\KepalaPusat\KepalaPusatListStatistikController; // Pastikan file ini dibuat
+use App\Http\Controllers\KepalaPusat\KepalaPusatDetailProposalController;
+use App\Http\Controllers\KepalaPusat\KepalaPusatListStatistikController;
 
 // --- WAKIL REKTOR 3 ---
 use App\Http\Controllers\WakilRektor3\WakilRektor3DashboardController;
 use App\Http\Controllers\WakilRektor3\WakilRektor3ValidasiController;
-use App\Http\Controllers\WakilRektor3\WakilRektor3DetailProposalController; // Pastikan file ini dibuat
-use App\Http\Controllers\WakilRektor3\WakilRektor3ListStatistikController; // Pastikan file ini dibuat
+use App\Http\Controllers\WakilRektor3\WakilRektor3DetailProposalController;
+use App\Http\Controllers\WakilRektor3\WakilRektor3ListStatistikController;
 
 
 // =========================================================================
@@ -93,6 +93,26 @@ Route::middleware('auth')->group(function () {
         Route::post('/proposal/{id}/approve', 'approve')->name('proposal.approve');
         Route::post('/proposal/{id}/reject', 'reject')->name('proposal.reject');
     });
+
+    Route::get('/image-view/{filename}', function ($filename) {
+        // Sesuaikan path ini dengan struktur folder di storage Anda
+        // Biasanya ada di: storage/app/public/tanda_tangan/
+        $path = storage_path('app/public/tanda_tangan/' . $filename);
+    
+        if (!file_exists($path)) {
+            abort(404);
+        }
+    
+        $file = File::get($path);
+        $type = File::mimeType($path);
+    
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+    
+        return $response;
+    })->name('storage.view');
+
+    
 
     // =====================================================================
     // 1. ADMIN SECTION

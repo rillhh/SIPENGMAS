@@ -13,61 +13,49 @@ class AdminListStatistikController extends Controller
     {
         $search = $request->input('search');
         $perPage = $request->input('per_page', 10);
-
-        // 1. Tentukan Judul & Query Base
         switch ($kategori) {
             case 'proposal_keseluruhan':
                 $pageTitle = 'Daftar Keseluruhan Proposal';
                 $query = Proposal::with(['user', 'identitas', 'biaya'])->orderByDesc('created_at');
                 break;
-
             case 'proposal_didanai':
                 $pageTitle = 'Daftar Proposal Didanai';
                 $query = Proposal::with(['user', 'identitas', 'biaya'])->where('status_progress', 4)->orderByDesc('created_at');
                 break;
-
             case 'artikel':
                 $pageTitle = 'Daftar Artikel Ilmiah';
                 $query = ProposalLampiran::with(['proposal.user', 'proposal.identitas'])->where('kategori', 'artikel')->orderByDesc('created_at');
                 break;
-
-            case 'buku': 
-            case 'sertifikat': 
+            case 'buku':
+            case 'sertifikat':
                 $pageTitle = 'Daftar Sertifikat Seminar';
-                $kategori = 'sertifikat'; 
+                $kategori = 'sertifikat';
                 $query = ProposalLampiran::with(['proposal.user', 'proposal.identitas'])->where('kategori', 'sertifikat')->orderByDesc('created_at');
                 break;
-
             case 'hki':
                 $pageTitle = 'Daftar Hak Kekayaan Intelektual (HKI)';
                 $query = ProposalLampiran::with(['proposal.user', 'proposal.identitas'])->where('kategori', 'hki')->orderByDesc('created_at');
                 break;
-
             default:
                 abort(404);
         }
 
-        // 2. Logika Pencarian
         if ($search) {
             if (in_array($kategori, ['proposal_keseluruhan', 'proposal_didanai'])) {
-                $query->where(function($q) use ($search) {
+                $query->where(function ($q) use ($search) {
                     $q->whereHas('identitas', fn($sub) => $sub->where('judul', 'like', "%{$search}%"))
-                      ->orWhereHas('user', fn($sub) => $sub->where('name', 'like', "%{$search}%"));
+                        ->orWhereHas('user', fn($sub) => $sub->where('name', 'like', "%{$search}%"));
                 });
             } else {
-                $query->where(function($q) use ($search) {
+                $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
-                      ->orWhereHas('proposal.identitas', fn($sub) => $sub->where('judul', 'like', "%{$search}%"))
-                      ->orWhereHas('proposal.user', fn($sub) => $sub->where('name', 'like', "%{$search}%"));
+                        ->orWhereHas('proposal.identitas', fn($sub) => $sub->where('judul', 'like', "%{$search}%"))
+                        ->orWhereHas('proposal.user', fn($sub) => $sub->where('name', 'like', "%{$search}%"));
                 });
             }
         }
 
-        // 3. Eksekusi Pagination
-        // Kita TIDAK PERLU melakukan mapping manual di sini karena View bisa memanggil Accessor Model langsung.
-        // Cukup kirimkan objek Eloquent murni ke View.
         $items = $query->paginate($perPage)->withQueryString();
-
         return view('admin.admin_list_statistik', compact('items', 'pageTitle', 'kategori', 'search'));
     }
 }

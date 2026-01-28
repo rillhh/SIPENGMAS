@@ -11,31 +11,15 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): View
     {
         return view('auth.login');
     }
-
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // 1. Proses Login Standar
         $request->authenticate();
         $request->session()->regenerate();
         $user = Auth::user();
-
-        // ---------------------------------------------------------------------
-        // CATATAN:
-        // Pengecekan undangan tidak dilakukan di sini lagi.
-        // Sudah ditangani otomatis oleh: app/Listeners/CekUndanganProposal.php
-        // yang berjalan saat event 'Illuminate\Auth\Events\Login' terjadi.
-        // ---------------------------------------------------------------------
-        // 2. Redirect Sesuai Role
         if ($user->role === 'Dosen') {
             return redirect()->route('dosen.dashboard');
         } elseif ($user->role === 'Admin') {
@@ -49,13 +33,9 @@ class AuthenticatedSessionController extends Controller
         } elseif ($user->role === 'Wakil Rektor 3') {
             return redirect()->route('wakil_rektor.dashboard');
         }
-        // Redirect default
         return redirect()->intended(route('dosen.dashboard'));
     }
-    
-    /**
-     * Destroy an authenticated session.
-     */
+
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();

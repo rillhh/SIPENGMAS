@@ -23,30 +23,23 @@ class NotifProposal extends Notification implements ShouldBroadcast
         return ['database', 'broadcast'];
     }
 
-    /**
-     * SIMPAN KE DATABASE (PENTING UNTUK CONTROLLER REDIRECT)
-     */
     public function toArray($notifiable)
     {
         return [
-            'title'   => $this->dataNotif['title'] ?? 'Notifikasi Baru',
-            'message' => $this->dataNotif['pesan'],
-            // Simpan proposal_id ke database (kolom data)
-            'proposal_id' => $this->dataNotif['proposal_id'] ?? null, 
-            'url'     => $this->dataNotif['url'] ?? '#',
-            'icon'    => $this->dataNotif['icon'] ?? 'fas fa-bell',
+            'title'       => $this->dataNotif['title'] ?? 'Notifikasi',
+            'message'     => $this->dataNotif['pesan'],
+            'proposal_id' => $this->dataNotif['proposal_id'] ?? null,
+            'url'         => $this->dataNotif['url'] ?? '#',
+            'icon'        => $this->dataNotif['icon'] ?? 'fas fa-bell',
         ];
     }
 
-    /**
-     * KIRIM SINYAL REALTIME (Agar JS bisa menangkap ID nya juga)
-     */
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
             'title'       => $this->dataNotif['title'] ?? 'Notifikasi Baru',
-            'message'     => $this->dataNotif['pesan'], 
-            'proposal_id' => $this->dataNotif['proposal_id'] ?? null, // Kirim ID via socket
+            'message'     => $this->dataNotif['pesan'],
+            'proposal_id' => $this->dataNotif['proposal_id'] ?? null,
             'url'         => $this->dataNotif['url'] ?? '#',
             'icon'        => $this->dataNotif['icon'] ?? 'fas fa-bell',
             'time'        => now()->diffForHumans(),

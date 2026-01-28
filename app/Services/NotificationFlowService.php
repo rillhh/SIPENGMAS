@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Skema;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NotifProposal;
 use App\Notifications\DekanUploadSignatureNotification;
@@ -41,20 +42,28 @@ class NotificationFlowService
      */
     private static function getKepalaPusatUsers($skemaId)
     {
-        // Mapping ID Skema ke Role
-        $roleName = match((int)$skemaId) {
-            1 => 'Kepala Pusat 1', 
-            2 => 'Kepala Pusat 2', 
-            3 => 'Kepala Pusat 3', 
-            4 => 'Kepala Pusat 4', 
-            5 => 'Kepala Pusat 5', 
-            default => null,
-        };
+        // 1. Ambil Skema
+        $skema = Skema::find($skemaId);
 
-        if ($roleName) {
-            return User::where('role', $roleName)->get();
+        if (!$skema || empty($skema->label_dropdown)) {
+            Log::warning("Notifikasi Gagal: Skema ID $skemaId tidak ditemukan atau label kosong.");
+            return collect([]);
         }
-        return collect([]);
+
+        // 2. Ambil SEMUA kandidat Kepala Pusat (Role mengandung kata "Kepala Pusat")
+        $candidates = User::where('role', 'LIKE', '%Kepala Pusat%')->get();
+
+        // 3. Filter manual menggunakan PHP (stripos) agar SAMA PERSIS dengan Controller
+        $matchedUsers = $candidates->filter(function ($user) use ($skema) {
+            // Cek apakah Nama User mengandung Label dari CMS (Case-Insensitive)
+            return stripos($user->name, $skema->label_dropdown) !== false;
+        });
+
+        if ($matchedUsers->isEmpty()) {
+            Log::warning("Notifikasi Gagal: Tidak ada user 'Kepala Pusat' yang namanya mengandung: " . $skema->label_dropdown);
+        }
+
+        return $matchedUsers;
     }
 
     // =========================================================================
@@ -62,6 +71,8 @@ class NotificationFlowService
     // =========================================================================
     public static function sendInvitation($listAnggota, $proposal)
     {
+        // [DEBUG] Cek apakah fungsi terpanggil
+        Log::info("Memulai proses kirim undangan untuk Proposal ID: " . $proposal->id);
         // A. Notifikasi ke Anggota (Ajakan Bergabung)
         foreach ($listAnggota as $anggota) {
             $userAnggota = User::where('nidn', trim($anggota->nidn))->first();
@@ -121,16 +132,16 @@ class NotificationFlowService
 
         // B. Kirim ke WAKIL DEKAN 3 (Validasi)
         $wakilDekan3 = User::where('role', 'Wakil Dekan 3')->get();
-        
+
         foreach ($wakilDekan3 as $wd3) {
             $wd3->notify(new NotifProposal([
                 'title' => 'Validasi Proposal Masuk',
                 'pesan' => 'Proposal menunggu validasi Anda: "' . Str::limit($proposal->identitas->judul, 40) . '".',
                 'proposal_id' => $proposal->id,
-                
+
                 // [PENTING] URL INI MENGARAH KE HALAMAN VALIDASI WADEK
-                'url'   => route('wakil_dekan3.validasi.detail', $proposal->id), 
-                
+                'url'   => route('wakil_dekan3.validasi.detail', $proposal->id),
+
                 'icon'  => 'fas fa-file-signature'
             ]));
         }
@@ -157,33 +168,32 @@ class NotificationFlowService
         if ($skala == 'prodi') {
             // --- ALUR PRODI: Wadek 3 -> Warek 3 ---
             $wakilRektor3 = User::where('role', 'Wakil Rektor 3')->get();
-            
+
             foreach ($wakilRektor3 as $wr3) {
                 $wr3->notify(new NotifProposal([
                     'title' => 'Validasi Proposal (Prodi)',
                     'pesan' => 'Proposal "' . Str::limit($proposal->identitas->judul, 30) . '" lolos Wadek 3. Menunggu validasi Anda.',
                     'proposal_id' => $proposal->id,
-                    
+
                     // [PENTING] URL INI MENGARAH KE HALAMAN VALIDASI WAREK
                     'url'   => route('wakil_rektor.validasi.detail', $proposal->id),
-                    
+
                     'icon'  => 'fas fa-file-signature'
                 ]));
             }
-
         } else {
             // --- ALUR PUSAT: Wadek 3 -> Kepala Pusat ---
             $kapusList = self::getKepalaPusatUsers($proposal->skema);
-            
+
             foreach ($kapusList as $kapus) {
                 $kapus->notify(new NotifProposal([
                     'title' => 'Validasi Proposal Pusat',
                     'pesan' => 'Proposal "' . Str::limit($proposal->identitas->judul, 30) . '" masuk untuk validasi Pusat.',
                     'proposal_id' => $proposal->id,
-                    
+
                     // [PENTING] URL INI MENGARAH KE HALAMAN VALIDASI KAPUS
                     'url'   => route('kepala_pusat.validasi.detail', $proposal->id),
-                    
+
                     'icon'  => 'fas fa-file-medical'
                 ]));
             }
@@ -207,16 +217,16 @@ class NotificationFlowService
 
         // 2. Notif ke NEXT APPROVER (Wakil Rektor 3)
         $wakilRektor3 = User::where('role', 'Wakil Rektor 3')->get();
-        
+
         foreach ($wakilRektor3 as $wr3) {
             $wr3->notify(new NotifProposal([
                 'title' => 'Validasi Proposal (Pusat)',
                 'pesan' => 'Proposal "' . Str::limit($proposal->identitas->judul, 30) . '" lolos Pusat. Menunggu validasi Anda.',
                 'proposal_id' => $proposal->id,
-                
+
                 // [PENTING] URL INI MENGARAH KE HALAMAN VALIDASI WAREK
                 'url'   => route('wakil_rektor.validasi.detail', $proposal->id),
-                
+
                 'icon'  => 'fas fa-file-signature'
             ]));
         }

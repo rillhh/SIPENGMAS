@@ -1,8 +1,3 @@
-{{-- 
-    FILE: resources/views/shared/modal_luaran.blade.php 
-    PENGGUNAAN: @include('shared.modal_luaran', ['lampiran' => $lampiran])
---}}
-
 {{-- 1. MODAL LIST ARTIKEL --}}
 <div class="modal fade" id="modalListArtikel" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

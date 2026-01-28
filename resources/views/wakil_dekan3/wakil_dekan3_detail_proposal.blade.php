@@ -3,7 +3,7 @@
 @section('title', 'Detail Validasi Proposal - Wakil Dekan III')
 
 @section('content')
-{{-- DEBUGGING TAG --}}
+    {{-- DEBUGGING TAG --}}
 
     {{-- SHARED ALERT --}}
     @include('shared.alert_script')
@@ -25,7 +25,7 @@
         <div class="row">
             {{-- KOLOM KIRI (DATA PROPOSAL) --}}
             <div class="col-lg-8">
-                
+
                 {{-- 1. IDENTITAS USULAN --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
@@ -53,8 +53,9 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="small text-muted fw-bold">Tahun Pelaksanaan</label>
-                                <p class="mb-0">{{ $detailProposal->tahun_pelaksanaan }} 
-                                    <span class="text-muted">({{ $detailProposal->identitas->periode_kegiatan ?? 1 }} Tahun)</span>
+                                <p class="mb-0">{{ $detailProposal->tahun_pelaksanaan }}
+                                    <span class="text-muted">({{ $detailProposal->identitas->periode_kegiatan ?? 1 }}
+                                        Tahun)</span>
                                 </p>
                             </div>
                         </div>
@@ -73,7 +74,8 @@
                     <div class="card-body">
                         <div class="mb-4">
                             <label class="small text-muted fw-bold mb-2">Abstrak / Ringkasan</label>
-                            <div class="p-3 bg-light rounded text-secondary border" style="font-style: italic; line-height: 1.6;">
+                            <div class="p-3 bg-light rounded text-secondary border"
+                                style="font-style: italic; line-height: 1.6;">
                                 "{{ $detailProposal->identitas->abstrak ?? '-' }}"
                             </div>
                         </div>
@@ -84,7 +86,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="small text-muted fw-bold">Lokasi Kegiatan</label>
-                                <p class="mb-0"><i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ $detailProposal->atribut->alamat_mitra ?? '-' }}</p>
+                                <p class="mb-0"><i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                    {{ $detailProposal->atribut->alamat_mitra ?? '-' }}</p>
                             </div>
                         </div>
                     </div>
@@ -93,7 +96,8 @@
                 {{-- 3. RENCANA ANGGARAN --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold text-primary mb-0"><i class="bi bi-cash-stack me-2"></i>Rencana Anggaran Biaya</h6>
+                        <h6 class="fw-bold text-primary mb-0"><i class="bi bi-cash-stack me-2"></i>Rencana Anggaran Biaya
+                        </h6>
                         <span class="badge bg-success fs-6 font-monospace px-3 py-2">
                             Total: Rp {{ number_format($detailProposal->total_dana, 0, ',', '.') }}
                         </span>
@@ -108,20 +112,26 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="ps-4">Honor Output</td>
-                                    <td class="text-end pe-4">{{ number_format($detailProposal->biaya->honor_output ?? 0, 0, ',', '.') }}</td>
+                                    <td class="ps-4">Honor</td>
+                                    <td class="text-end pe-4">
+                                        {{ number_format($detailProposal->biaya->honor_output ?? 0, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4">Belanja Non Operasional</td>
-                                    <td class="text-end pe-4">{{ number_format($detailProposal->biaya->belanja_non_operasional ?? 0, 0, ',', '.') }}</td>
+                                    <td class="ps-4">Biaya Inovasi</td>
+                                    <td class="text-end pe-4">
+                                        {{ number_format($detailProposal->biaya->belanja_non_operasional ?? 0, 0, ',', '.') }}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4">Bahan Habis Pakai</td>
-                                    <td class="text-end pe-4">{{ number_format($detailProposal->biaya->bahan_habis_pakai ?? 0, 0, ',', '.') }}</td>
+                                    <td class="ps-4">Perjalanan atau Transportasi</td>
+                                    <td class="text-end pe-4">
+                                        {{ number_format($detailProposal->biaya->transportasi ?? 0, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4">Transportasi</td>
-                                    <td class="text-end pe-4">{{ number_format($detailProposal->biaya->transportasi ?? 0, 0, ',', '.') }}</td>
+                                    <td class="ps-4">Luaran</td>
+                                    <td class="text-end pe-4">
+                                        {{ number_format($detailProposal->biaya->lain_lain ?? 0, 0, ',', '.') }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -131,34 +141,34 @@
 
             {{-- KOLOM KANAN (PANEL VALIDASI & TIM) --}}
             <div class="col-lg-4">
-                
+
                 {{-- [PENTING] PANEL VALIDASI --}}
                 {{-- Hanya muncul jika status == 1 (Menunggu Validasi Wadek 3) --}}
-                @if($detailProposal->status_progress == 1) 
+                @if ($detailProposal->status_progress == 1)
                     <div class="card shadow border-0 mb-4 bg-primary bg-opacity-10 border-primary">
                         <div class="card-body">
-                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-shield-check me-2"></i>Keputusan Validasi</h6>
-                            <p class="small text-muted mb-3">Proposal ini menunggu persetujuan Anda sebagai Wakil Dekan III.</p>
-                            
+                            <h6 class="fw-bold text-primary mb-3"><i class="bi bi-shield-check me-2"></i>Keputusan Validasi
+                            </h6>
+                            <p class="small text-muted mb-3">Proposal ini menunggu persetujuan Anda sebagai Wakil Dekan III.
+                            </p>
+
                             <div class="d-grid gap-2">
                                 {{-- Tombol Terima: Trigger Modal Setuju (ID: #modalSetuju{ID}) --}}
-                                <button class="btn btn-success fw-bold text-white shadow-sm" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modalSetuju{{ $detailProposal->id }}">
+                                <button class="btn btn-success fw-bold text-white shadow-sm" data-bs-toggle="modal"
+                                    data-bs-target="#modalSetuju{{ $detailProposal->id }}">
                                     <i class="bi bi-check-circle-fill me-2"></i> Validasi / Setujui
                                 </button>
-                                
+
                                 {{-- Tombol Tolak: Trigger Modal Tolak (ID: #modalTolak{ID}) --}}
-                                <button class="btn btn-danger fw-bold text-white shadow-sm" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modalTolak{{ $detailProposal->id }}">
+                                <button class="btn btn-danger fw-bold text-white shadow-sm" data-bs-toggle="modal"
+                                    data-bs-target="#modalTolak{{ $detailProposal->id }}">
                                     <i class="bi bi-x-circle-fill me-2"></i> Tolak / Revisi
                                 </button>
                             </div>
                         </div>
                     </div>
                 @endif
-            
+
                 {{-- TIM PELAKSANA --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
@@ -167,27 +177,33 @@
                     <div class="list-group list-group-flush">
                         @foreach ($anggota as $item)
                             @php
-                                $isMahasiswa = str_contains($item->peran ?? '', 'Mahasiswa') || ($item->tipe ?? '') == 'Mahasiswa';
+                                $isMahasiswa =
+                                    str_contains($item->peran ?? '', 'Mahasiswa') || ($item->tipe ?? '') == 'Mahasiswa';
                                 $inisial = $isMahasiswa ? 'M' : 'D';
                                 $isKetua = ($item->tipe ?? '') === 'Ketua';
-                                $statusApproved = $isKetua ? 1 : ($item->is_approved_dosen ?? 0);
+                                $statusApproved = $isKetua ? 1 : $item->is_approved_dosen ?? 0;
                             @endphp
 
                             <div class="list-group-item px-3 py-3">
                                 <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 bg-light rounded-circle d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 40px; height: 40px;">
+                                    <div class="flex-shrink-0 bg-light rounded-circle d-flex align-items-center justify-content-center text-primary fw-bold"
+                                        style="width: 40px; height: 40px;">
                                         {{ $inisial }}
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="mb-0 fw-bold text-dark small">{{ $item->nama }}</h6>
                                         <small class="text-muted d-block">{{ $item->peran }}</small>
                                     </div>
-                                    @if($isKetua)
+                                    @if ($isKetua)
                                         <span class="badge bg-primary rounded-pill" style="font-size: 0.6rem;">Ketua</span>
                                     @elseif($statusApproved == 1 && !$isMahasiswa)
-                                        <span class="badge bg-success-subtle text-success rounded-pill border border-success-subtle" style="font-size: 0.6rem;">Confirmed</span>
+                                        <span
+                                            class="badge bg-success-subtle text-success rounded-pill border border-success-subtle"
+                                            style="font-size: 0.6rem;">Confirmed</span>
                                     @elseif(!$isMahasiswa)
-                                        <span class="badge bg-warning-subtle text-warning rounded-pill border border-warning-subtle" style="font-size: 0.6rem;">Waiting</span>
+                                        <span
+                                            class="badge bg-warning-subtle text-warning rounded-pill border border-warning-subtle"
+                                            style="font-size: 0.6rem;">Waiting</span>
                                     @endif
                                 </div>
                             </div>
@@ -199,7 +215,8 @@
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body">
                         <div class="d-grid">
-                            <a href="{{ \Storage::url($detailProposal->file_proposal) }}" target="_blank" class="btn btn-outline-primary fw-bold py-2 border-2">
+                            <a href="{{ \Storage::url($detailProposal->file_proposal) }}" target="_blank"
+                                class="btn btn-outline-primary fw-bold py-2 border-2">
                                 <i class="bi bi-file-earmark-pdf-fill me-2"></i> Lihat File Proposal
                             </a>
                         </div>
@@ -214,7 +231,8 @@
                     <div class="card-body">
                         @forelse($lampiran->where('kategori', 'dokumen') as $item)
                             <div class="d-grid gap-2 mb-2">
-                                <a href="{{ \Storage::url($item->file_path) }}" target="_blank" class="btn btn-outline-secondary btn-sm text-start text-break border-0 bg-light">
+                                <a href="{{ \Storage::url($item->file_path) }}" target="_blank"
+                                    class="btn btn-outline-secondary btn-sm text-start text-break border-0 bg-light">
                                     <i class="bi bi-file-pdf me-2 text-danger"></i> {{ $item->judul }}
                                 </a>
                             </div>
@@ -240,42 +258,57 @@
                         @endphp
                         <div class="d-grid gap-2">
                             {{-- BUTTON ARTIKEL --}}
-                            <button class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
+                            <button
+                                class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
                                 data-bs-toggle="modal" data-bs-target="#modalListArtikel">
-                                <span class="fw-semibold text-dark"><i class="bi bi-journal-text text-danger me-2"></i> Artikel Ilmiah</span>
+                                <span class="fw-semibold text-dark"><i class="bi bi-journal-text text-danger me-2"></i>
+                                    Artikel Ilmiah</span>
                                 <div class="d-flex align-items-center">
-                                    @if ($jmlArtikel > 0) <span class="badge bg-success text-white rounded-pill me-2">{{ $jmlArtikel }} File</span> @endif
+                                    @if ($jmlArtikel > 0)
+                                        <span class="badge bg-success text-white rounded-pill me-2">{{ $jmlArtikel }}
+                                            File</span>
+                                    @endif
                                     <i class="bi bi-chevron-right text-muted"></i>
                                 </div>
                             </button>
                             {{-- BUTTON SERTIFIKAT --}}
-                            <button class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
+                            <button
+                                class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
                                 data-bs-toggle="modal" data-bs-target="#modalListBuku">
-                                <span class="fw-semibold text-dark"><i class="bi bi-book text-success me-2"></i> Sertifikat Seminar</span>
+                                <span class="fw-semibold text-dark"><i class="bi bi-book text-success me-2"></i>
+                                    Sertifikat Seminar</span>
                                 <div class="d-flex align-items-center">
-                                    @if ($jmlSertifikat > 0) <span class="badge bg-success text-white rounded-pill me-2">{{ $jmlSertifikat }} File</span> @endif
+                                    @if ($jmlSertifikat > 0)
+                                        <span class="badge bg-success text-white rounded-pill me-2">{{ $jmlSertifikat }}
+                                            File</span>
+                                    @endif
                                     <i class="bi bi-chevron-right text-muted"></i>
                                 </div>
                             </button>
                             {{-- BUTTON HKI --}}
-                            <button class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
+                            <button
+                                class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
                                 data-bs-toggle="modal" data-bs-target="#modalListHKI">
-                                <span class="fw-semibold text-dark"><i class="bi bi-award text-warning me-2"></i> HKI</span>
+                                <span class="fw-semibold text-dark"><i class="bi bi-award text-warning me-2"></i>
+                                    HKI</span>
                                 <div class="d-flex align-items-center">
-                                    @if ($jmlHKI > 0) <span class="badge bg-success text-white rounded-pill me-2">{{ $jmlHKI }} File</span> @endif
+                                    @if ($jmlHKI > 0)
+                                        <span class="badge bg-success text-white rounded-pill me-2">{{ $jmlHKI }}
+                                            File</span>
+                                    @endif
                                     <i class="bi bi-chevron-right text-muted"></i>
                                 </div>
                             </button>
                         </div>
                     </div>
-                </div>  
+                </div>
 
                 {{-- DOWNLOAD PENGESAHAN --}}
                 <div class="d-flex justify-content-end mt-1 mb-5">
                     @php $isReady = $detailProposal->status_progress >= 4; @endphp
-                    <a href="{{ $isReady ? route('dosen.proposal.export_pdf', $detailProposal->id) : '#' }}" 
-                       class="btn {{ $isReady ? 'btn-success' : 'btn-secondary' }} btn-lg px-3 w-100 fw-bold shadow-sm"
-                       onclick="{{ !$isReady ? 'event.preventDefault(); showDownloadAlert();' : '' }}">
+                    <a href="{{ $isReady ? route('dosen.proposal.export_pdf', $detailProposal->id) : '#' }}"
+                        class="btn {{ $isReady ? 'btn-success' : 'btn-secondary' }} btn-lg px-3 w-100 fw-bold shadow-sm"
+                        onclick="{{ !$isReady ? 'event.preventDefault(); showDownloadAlert();' : '' }}">
                         <i class="bi bi-file-earmark-pdf-fill me-2"></i>Download Lembar Pengesahan
                     </a>
                 </div>
@@ -291,10 +324,10 @@
         Hanya dipanggil jika status proposal = 1 (Menunggu Validasi Wadek)
         Kirim variabel 'prop' (bukan proposal) agar konsisten dengan modal di halaman list.
     --}}
-    @if($detailProposal->status_progress == 1)
+    @if ($detailProposal->status_progress == 1)
         @include('wakil_dekan3.partials.modal_action', [
-            'prop' => $detailProposal,   
-            'dekanHasSignature' => $dekanHasSignature 
+            'prop' => $detailProposal,
+            'dekanHasSignature' => $dekanHasSignature,
         ])
     @endif
 
@@ -302,21 +335,33 @@
 
 @push('styles')
     <style>
-        .hover-shadow:hover { background-color: #f8f9fa; border-color: #8BC3B4 !important; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); }
-        .btn-success { background-color: #378a75; border-color: #378a75; }
-        .btn-success:hover { background-color: #2e7060; border-color: #2e7060; }
+        .hover-shadow:hover {
+            background-color: #f8f9fa;
+            border-color: #8BC3B4 !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-success {
+            background-color: #378a75;
+            border-color: #378a75;
+        }
+
+        .btn-success:hover {
+            background-color: #2e7060;
+            border-color: #2e7060;
+        }
     </style>
 @endpush
 
 @push('scripts')
-<script>
-    function showDownloadAlert() {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Belum Tersedia',
-            text: 'Lembar pengesahan hanya dapat diunduh setelah proposal selesai divalidasi dan didanai.',
-            confirmButtonColor: '#378a75'
-        });
-    }
-</script>
+    <script>
+        function showDownloadAlert() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Belum Tersedia',
+                text: 'Lembar pengesahan hanya dapat diunduh setelah proposal selesai divalidasi dan didanai.',
+                confirmButtonColor: '#378a75'
+            });
+        }
+    </script>
 @endpush

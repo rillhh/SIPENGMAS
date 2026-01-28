@@ -12,7 +12,8 @@ return new class extends Migration {
             $table->foreignId('proposal_id')->constrained('proposal')->onDelete('cascade');
             $table->string('nidn', 20);
             $table->string('nama', 50);
-            $table->string('prodi', 50);
+            $table->string('fakultas', 100);
+            $table->string('prodi', 100);
             $table->string('peran', 50);
             $table->boolean('is_approved_dosen')->default(false);
             $table->timestamps();

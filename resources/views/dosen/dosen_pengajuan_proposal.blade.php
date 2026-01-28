@@ -14,11 +14,13 @@
     </div>
 
     {{-- 3. MODAL UPLOAD TANDA TANGAN (AJAX) --}}
-    <div class="modal fade" id="modalUploadSignature" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" id="modalUploadSignature" tabindex="-1" aria-hidden="true" data-bs-backdrop="static"
+        data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-warning text-dark border-0">
-                    <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Tanda Tangan Diperlukan</h5>
+                    <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i>Tanda Tangan
+                        Diperlukan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -27,27 +29,30 @@
                     </div>
                     <div class="alert alert-light border mb-3 small text-muted">
                         <i class="bi bi-info-circle me-1"></i>
-                        Anda belum memiliki tanda tangan digital. Mohon unggah sekarang agar dapat dibubuhkan pada lembar pengesahan secara otomatis.
+                        Anda belum memiliki tanda tangan digital. Mohon unggah sekarang agar dapat dibubuhkan pada lembar
+                        pengesahan secara otomatis.
                     </div>
-                    
+
                     {{-- Form AJAX --}}
                     <form id="formAjaxSignature" enctype="multipart/form-data">
                         @csrf
                         <div class="card bg-light border-0 p-3 mb-3">
                             <label class="form-label fw-bold small text-muted">File Tanda Tangan</label>
-                            <input type="file" class="form-control" id="ajax_tanda_tangan" name="tanda_tangan" accept="image/png, image/jpeg, image/jpg" required>
+                            <input type="file" class="form-control" id="ajax_tanda_tangan" name="tanda_tangan"
+                                accept="image/png, image/jpeg, image/jpg" required>
                             <div class="form-text small text-muted">
                                 <i class="bi bi-check-circle me-1"></i>Format: PNG/JPG (Max 2MB).<br>
                                 <i class="bi bi-magic me-1"></i>Background putih akan otomatis dihapus.
                             </div>
                             <div id="ajax-error-msg" class="text-danger small mt-2 d-none fw-bold"></div>
                         </div>
-                        
+
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary fw-bold" id="btnSaveAjaxSignature">
                                 <span id="btn-text-upload">Simpan & Lanjutkan Pengajuan</span>
                                 <span id="btn-loader-upload" class="d-none">
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memproses...
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Memproses...
                                 </span>
                             </button>
                         </div>
@@ -210,17 +215,26 @@
                             <input type="text" class="form-control bg-light" name="bidang_fokus"
                                 value="Teknologi Informasi" readonly maxlength="50">
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Jumlah Tendik</label>
+                            <input type="text"
+                                class="form-control input-rupiah @error('jumlah_tendik') is-invalid @enderror"
+                                name="jumlah_tendik" maxlength="3" placeholder="0" value="{{ old('jumlah_tendik') }}">
+                            @error('jumlah_tendik')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Jumlah Mahasiswa</label>
+                            <input type="text"
+                                class="form-control input-rupiah @error('jumlah_mahasiswa') is-invalid @enderror"
+                                name="jumlah_mahasiswa" maxlength="3" placeholder="0" value="{{ old('jumlah_mahasiswa') }}">
+                            @error('jumlah_mahasiswa')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Jumlah Tendik</label>
-                        <input type="text"
-                            class="form-control input-rupiah @error('jumlah_tendik') is-invalid @enderror"
-                            name="jumlah_tendik" maxlength="3" placeholder="0" value="{{ old('jumlah_tendik') }}">
-                        @error('jumlah_tendik')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    
                 </div>
             </div>
 
@@ -259,12 +273,10 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="d-flex justify-content-between align-items-center">
-                                <label for="mitra_penanggung_jawab" class="form-label mb-1">Penanggung Jawab <span
-                                        class="text-danger">*</span></label>
+                                <label for="mitra_penanggung_jawab" class="form-label mb-1">Penanggung Jawab </label>
                                 <small id="mitra_penanggung_jawab-counter" class="form-text text-muted">0/50</small>
                             </div>
-                            {{-- SESUAI CONTROLLER: max 50 --}}
-                            <input required type="text"
+                            <input type="text"
                                 class="form-control @error('penanggung_jawab_mitra') is-invalid @enderror"
                                 name="penanggung_jawab_mitra" id="mitra_penanggung_jawab"
                                 value="{{ old('penanggung_jawab_mitra') }}" maxlength="50">
@@ -286,7 +298,7 @@
             </div>
 
             {{-- 3. URAIAN UMUM --}}
-            <div class="card shadow-sm mb-4">
+            <!-- <div class="card shadow-sm mb-4">
                 <div class="card-header bg-light">
                     <h6 class="mb-0 fw-bold">3. Identitas dan Uraian Umum</h6>
                 </div>
@@ -300,9 +312,8 @@
                         </div>
                         {{-- SESUAI CONTROLLER: max 50 --}}
                         <input required type="text"
-                            class="form-control @error('objek_pengabdian') is-invalid @enderror"
-                            name="objek_pengabdian" id="objek_pengabdian" value="{{ old('objek_pengabdian') }}"
-                            maxlength="50">
+                            class="form-control @error('objek_pengabdian') is-invalid @enderror" name="objek_pengabdian"
+                            id="objek_pengabdian" value="{{ old('objek_pengabdian') }}" maxlength="50">
                         <div class="invalid-feedback">Objek pengabdian wajib diisi.</div>
                     </div>
 
@@ -344,17 +355,17 @@
                             <small id="lokasi_pengabdian-counter" class="form-text text-muted">0/100</small>
                         </div>
                         {{-- SESUAI CONTROLLER: max 100 (Controller: 100, Bukan 250) --}}
-                        <textarea required class="form-control @error('lokasi_pengabdian') is-invalid @enderror"
-                            name="lokasi_pengabdian" id="lokasi_pengabdian" rows="3" maxlength="100">{{ old('lokasi_pengabdian') }}</textarea>
+                        <textarea required class="form-control @error('lokasi_pengabdian') is-invalid @enderror" name="lokasi_pengabdian"
+                            id="lokasi_pengabdian" rows="3" maxlength="100">{{ old('lokasi_pengabdian') }}</textarea>
                         <div class="invalid-feedback">Lokasi pengabdian wajib diisi.</div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             {{-- 4. ANGGOTA DOSEN --}}
             <div class="card shadow-sm mb-4" id="card-anggota-dosen">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0 fw-bold">4. Penambahan Anggota Pengabdian <span class="text-danger">*</span></h6>
+                    <h6 class="mb-0 fw-bold">3. Penambahan Anggota Pengabdian <span class="text-danger">*</span></h6>
                 </div>
                 <div class="card-body">
                     <div id="error-anggota-dosen" class="alert alert-danger d-none p-2 mb-3">
@@ -366,7 +377,7 @@
                     @enderror
 
                     <div class="mb-3">
-                        <label class="form-label">NIDN</label>
+                        <label class="form-label">Nomor Induk Pegawai (NIP)</label>
                         <div class="input-group">
                             {{-- SESUAI CONTROLLER: max 20 --}}
                             <input type="text" class="form-control only-number" id="nidn_input" inputmode="numeric"
@@ -379,15 +390,20 @@
                         <input type="text" class="form-control bg-light" id="nama_dosen_form" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label mb-1">Program Studi</label>
-                        <select class="form-select" id="prodi_dosen_form">
-                            {{-- Default Teknik Informatika --}}
-                            <option value="Teknik Informatika" selected>Teknik Informatika</option>
-                            @foreach ($prodis as $prodi)
-                                @if($prodi->nama !== 'Teknik Informatika')
-                                    <option value="{{ $prodi->nama }}">{{ $prodi->nama }}</option>
-                                @endif
+                        <label class="form-label mb-1">Fakultas</label>
+                        <select class="form-select" id="fakultas_dosen_form">
+                            <option value="" selected disabled>-- Pilih Fakultas --</option>
+                            @foreach ($dataFakultas as $fakultas)
+                                <option value="{{ $fakultas->nama }}" data-prodis="{{ json_encode($fakultas->prodis) }}">
+                                    {{ $fakultas->nama }}
+                                </option>
                             @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label mb-1">Program Studi</label>
+                        <select class="form-select" id="prodi_dosen_form" disabled>
+                            <option value="" selected disabled>-- Pilih Fakultas Terlebih Dahulu --</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -401,7 +417,8 @@
                         <thead class="table-light">
                             <tr>
                                 <th>No</th>
-                                <th>Nama & NIDN</th>
+                                <th>Nama & NIP</th>
+                                <th>Fakultas</th>
                                 <th>Prodi</th>
                                 <th>Peran</th>
                                 <th>Aksi</th>
@@ -411,21 +428,20 @@
                             @if (old('anggota_dosen'))
                                 @foreach (old('anggota_dosen') as $index => $dosen)
                                     <tr>
-                                        <td class="text-center row-number">{{ $loop->iteration }}</td>
+                                    <td class="text-center row-number">{{ $loop->iteration }}</td>
                                         <td>
                                             <strong>{{ $dosen['nama'] }}</strong><br>
                                             <small>{{ $dosen['nidn'] }}</small>
-                                            <input type="hidden" name="anggota_dosen[{{ $index }}][nidn]"
-                                                value="{{ $dosen['nidn'] }}">
-                                            <input type="hidden" name="anggota_dosen[{{ $index }}][nama]"
-                                                value="{{ $dosen['nama'] }}">
-                                            <input type="hidden" name="anggota_dosen[{{ $index }}][fakultas_dosen]"
-                                                value="Teknologi Informasi">
-                                            <input type="hidden" name="anggota_dosen[{{ $index }}][prodi_dosen]"
-                                                value="{{ $dosen['prodi_dosen'] }}">
-                                            <input type="hidden" name="anggota_dosen[{{ $index }}][peran]"
-                                                value="{{ $dosen['peran'] }}">
+                                            <input type="hidden" name="anggota_dosen[{{ $index }}][nidn]" value="{{ $dosen['nidn'] }}">
+                                            <input type="hidden" name="anggota_dosen[{{ $index }}][nama]" value="{{ $dosen['nama'] }}">
+                                            
+                                            {{-- HIDDEN INPUT FAKULTAS --}}
+                                            <input type="hidden" name="anggota_dosen[{{ $index }}][fakultas_dosen]" value="{{ $dosen['fakultas_dosen'] }}">
+                                            
+                                            <input type="hidden" name="anggota_dosen[{{ $index }}][prodi_dosen]" value="{{ $dosen['prodi_dosen'] }}">
+                                            <input type="hidden" name="anggota_dosen[{{ $index }}][peran]" value="{{ $dosen['peran'] }}">
                                         </td>
+                                        <td>{{ $dosen['fakultas_dosen'] }}</td>
                                         <td>{{ $dosen['prodi_dosen'] }}</td>
                                         <td>
                                             <div class="role-text">{{ $dosen['peran'] }}</div>
@@ -444,7 +460,7 @@
             {{-- 5. ANGGOTA MAHASISWA --}}
             <div class="card shadow-sm mb-4" id="card-anggota-mhs">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0 fw-bold">5. Penambahan Anggota Mahasiswa <span class="text-danger">*</span></h6>
+                    <h6 class="mb-0 fw-bold">4. Penambahan Anggota Mahasiswa <span class="text-danger">*</span></h6>
                 </div>
                 <div class="card-body">
                     <div id="error-anggota-mhs" class="alert alert-danger d-none p-2 mb-3">
@@ -456,7 +472,7 @@
                     @enderror
 
                     <div class="mb-3">
-                        <label class="form-label mb-1">NPM</label>
+                        <label class="form-label mb-1">Nomor Pokok Mahasiswa (NPM)</label>
                         <div class="input-group">
                             {{-- SESUAI CONTROLLER: max 20 --}}
                             <input type="text" class="form-control only-number" id="npm_input" inputmode="numeric"
@@ -474,7 +490,7 @@
                             {{-- Default Teknik Informatika --}}
                             <option value="Teknik Informatika" selected>Teknik Informatika</option>
                             @foreach ($prodis as $prodi)
-                                @if($prodi->nama !== 'Teknik Informatika')
+                                @if ($prodi->nama !== 'Teknik Informatika')
                                     <option value="{{ $prodi->nama }}">{{ $prodi->nama }}</option>
                                 @endif
                             @endforeach
@@ -531,41 +547,49 @@
             {{-- 6. BIAYA --}}
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0 fw-bold">6. Rencana Anggaran Biaya</h6>
+                    <h6 class="mb-0 fw-bold">5. Rencana Anggaran Biaya</h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="mb-3">
-                            <label class="form-label">Honor Output <span class="text-danger">*</span></label>
+                            <label class="form-label">Honor<span class="text-danger">*</span></label>
                             <input required type="text"
-                                class="form-control input-rupiah @error('honor_output') is-invalid @enderror"
+                                class="form-control input-rupiah biaya-input @error('honor_output') is-invalid @enderror"
                                 name="honor_output" maxlength="10" placeholder="2.000.000"
                                 value="{{ old('honor_output') }}">
                             <div class="invalid-feedback">Honor output wajib diisi.</div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Belanja Non Operasional <span class="text-danger">*</span></label>
+                            <label class="form-label">Biaya Inovasi <span class="text-danger">*</span></label>
                             <input required type="text"
-                                class="form-control input-rupiah @error('belanja_non_operasional') is-invalid @enderror"
+                                class="form-control input-rupiah biaya-input @error('belanja_non_operasional') is-invalid @enderror"
                                 name="belanja_non_operasional" maxlength="10" placeholder="2.000.000"
                                 value="{{ old('belanja_non_operasional') }}">
-                            <div class="invalid-feedback">Belanja non operasional wajib diisi.</div>
+                            <div class="invalid-feedback">Biaya Inovasi wajib diisi.</div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Bahan Habis Pakai <span class="text-danger">*</span></label>
+                            <label class="form-label">Perjalanan atau Transportasi <span class="text-danger">*</span></label>
                             <input required type="text"
-                                class="form-control input-rupiah @error('bahan_habis_pakai') is-invalid @enderror"
-                                name="bahan_habis_pakai" maxlength="10" placeholder="2.000.000"
-                                value="{{ old('bahan_habis_pakai') }}">
-                            <div class="invalid-feedback">Bahan habis pakai wajib diisi.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Transportasi <span class="text-danger">*</span></label>
-                            <input required type="text"
-                                class="form-control input-rupiah @error('transportasi') is-invalid @enderror"
+                                class="form-control input-rupiah biaya-input @error('transportasi') is-invalid @enderror"
                                 name="transportasi" maxlength="10" placeholder="2.000.000"
                                 value="{{ old('transportasi') }}">
-                            <div class="invalid-feedback">Transportasi wajib diisi.</div>
+                            <div class="invalid-feedback">Perjalanan atau Transportasi wajib diisi.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Luaran<span class="text-danger">*</span></label>
+                            <input required type="text"
+                                class="form-control input-rupiah  biaya-input @error('lain_lain') is-invalid @enderror"
+                                name="lain_lain" maxlength="10" placeholder="2.000.000"
+                                value="{{ old('lain_lain') }}">
+                            <div class="invalid-feedback">Luaran wajib diisi.</div>
+                        </div>
+                        <hr>
+
+                        {{-- TOTAL CALCULATOR (READONLY) --}}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-success fs-5">Total Anggaran (Rp)</label>
+                            <input type="text" id="total_biaya_display" class="form-control bg-light fw-bold text-end fs-4 text-success" 
+                                readonly value="0" style="letter-spacing: 1px;">
                         </div>
                     </div>
                 </div>
@@ -574,7 +598,7 @@
             {{-- 7. PENGESAHAN --}}
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-light">
-                    <h6 class="mb-0 fw-bold">7. Pengesahan</h6>
+                    <h6 class="mb-0 fw-bold">6. Pengesahan</h6>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -599,7 +623,7 @@
                                 name="nip_mengetahui" inputmode="numeric" placeholder="NIP" maxlength="20"
                                 value="{{ old('nip_mengetahui') }}">
                             <div class="invalid-feedback">NIP wajib diisi.</div>
-                            
+
                             <label class="form-label">Nama Lengkap <span class="text-danger"></span></label>
                             {{-- SESUAI CONTROLLER: max 30 (PERBAIKAN UTAMA) --}}
                             <input required type="text"
@@ -607,7 +631,7 @@
                                 name="nama_mengetahui" placeholder="Nama Lengkap" maxlength="30"
                                 value="{{ old('nama_mengetahui') }}">
                             <div class="invalid-feedback">Nama wajib diisi.</div>
-                            
+
                             <label class="form-label">Jabatan <span class="text-danger"></span></label>
                             {{-- SESUAI CONTROLLER: max 30 (PERBAIKAN UTAMA) --}}
                             <input required type="text"
@@ -626,15 +650,15 @@
                                 name="nip_menyetujui" inputmode="numeric" placeholder="NIP" maxlength="20"
                                 value="{{ old('nip_menyetujui') }}">
                             <div class="invalid-feedback">NIP wajib diisi.</div>
-                            
+
                             <label class="form-label">Nama Lengkap <span class="text-danger"></span></label>
                             {{-- SESUAI CONTROLLER: max 30 (PERBAIKAN UTAMA) --}}
                             <input required type="text"
                                 class="form-control mb-2 @error('nama_menyetujui') is-invalid @enderror"
-                                name="nama_menyetujui" placeholder="Nama Lengkap" maxlength="30"
+                                name="nama_menyetujui" placeholder="Nama Lengkap" maxlength="50"
                                 value="{{ old('nama_menyetujui') }}">
                             <div class="invalid-feedback">Nama wajib diisi.</div>
-                            
+
                             <label class="form-label">Jabatan <span class="text-danger"></span></label>
                             {{-- SESUAI CONTROLLER: max 30 (PERBAIKAN UTAMA) --}}
                             <input required type="text"
@@ -755,13 +779,12 @@
                 btnCheckNIDN.addEventListener('click', function() {
                     const id = document.getElementById('nidn_input').value.trim();
                     if (id === currentUserNidn) {
-                        showFloatingAlert("Anda tidak dapat menambahkan diri sendiri sebagai anggota.",
-                            "warning");
+                        showFloatingAlert("Anda tidak dapat menambahkan diri sendiri sebagai anggota.", "warning");
                         document.getElementById('nama_dosen_form').value = "";
                         return;
                     }
                     if (isIdAlreadyInTable(id, 'tabelAnggotaDosen', 'nidn')) {
-                        showFloatingAlert("Anggota dengan NIDN ini sudah ditambahkan.", "warning");
+                        showFloatingAlert("Anggota dengan NIP ini sudah ditambahkan.", "warning");
                         document.getElementById('nama_dosen_form').value = "";
                         return;
                     }
@@ -783,54 +806,118 @@
                 });
             }
 
-            // 3. TAMBAH DOSEN
+            // -------------------------------------------------------------------------
+            // 3. LOGIKA CASCADING DROPDOWN (FAKULTAS -> PRODI) - [REVISI BARU]
+            // -------------------------------------------------------------------------
+            const fakultasSelect = document.getElementById('fakultas_dosen_form');
+            const prodiSelect = document.getElementById('prodi_dosen_form');
+
+            if (fakultasSelect && prodiSelect) {
+                fakultasSelect.addEventListener('change', function() {
+                    // Ambil data JSON dari atribut data-prodis
+                    const selectedOption = this.options[this.selectedIndex];
+                    const rawData = selectedOption.getAttribute('data-prodis');
+                    let prodis = [];
+                    
+                    try {
+                        prodis = JSON.parse(rawData);
+                    } catch (e) {
+                        console.error("Gagal Mendapatkan data prodi", e);
+                    }
+                    
+                    // Reset Prodi Dropdown
+                    prodiSelect.innerHTML = '<option value="" selected disabled>-- Pilih Program Studi --</option>';
+                    
+                    // Isi Prodi Dropdown
+                    if (prodis && prodis.length > 0) {
+                        prodiSelect.disabled = false; // Aktifkan dropdown
+                        prodis.forEach(prodi => {
+                            const option = document.createElement('option');
+                            option.value = prodi.nama; // Pastikan 'nama' sesuai kolom DB
+                            option.textContent = prodi.nama;
+                            prodiSelect.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.textContent = "Tidak ada prodi di fakultas ini";
+                        prodiSelect.appendChild(option);
+                        prodiSelect.disabled = true;
+                    }
+                });
+            }
+
+            // -------------------------------------------------------------------------
+            // 4. TOMBOL TAMBAH DOSEN - [REVISI BARU]
+            // -------------------------------------------------------------------------
             const btnTambahDosen = document.getElementById('btnTambahDosen');
             if (btnTambahDosen) {
                 btnTambahDosen.addEventListener('click', function() {
                     const nidn = document.getElementById('nidn_input').value.trim();
                     const nama = document.getElementById('nama_dosen_form').value;
+                    const fakultas = document.getElementById('fakultas_dosen_form').value; // Ambil Fakultas
                     const prodi = document.getElementById('prodi_dosen_form').value;
                     const peran = document.getElementById('peran_dosen_form').value;
                     const tableBody = document.getElementById('tabelAnggotaDosen');
                     const index = tableBody.rows.length;
 
-                    if (!nidn || !nama || nama === "Mencari data...") {
-                        return showFloatingAlert("Cek NIDN via LDAP dulu sebelum menambahkan!", "warning");
+                    // Validasi
+                    if (!nidn || !nama || nama === "Mencari data..." || nama === "") {
+                        return showFloatingAlert("Cek NIP via LDAP dulu sebelum menambahkan!", "warning");
                     }
                     if (nidn === currentUserNidn) {
-                        return showFloatingAlert(
-                            "Anda tidak dapat menambahkan diri sendiri sebagai anggota.", "warning");
+                        return showFloatingAlert("Anda tidak dapat menambahkan diri sendiri sebagai anggota.", "warning");
+                    }
+                    if (!fakultas) {
+                        return showFloatingAlert("Silakan pilih Fakultas terlebih dahulu!", "warning");
+                    }
+                    if (!prodi && !document.getElementById('prodi_dosen_form').disabled) {
+                        return showFloatingAlert("Silakan pilih Program Studi terlebih dahulu!", "warning");
                     }
                     if (isIdAlreadyInTable(nidn, 'tabelAnggotaDosen', 'nidn')) {
                         return showFloatingAlert("Anggota dengan NIDN ini sudah ditambahkan.", "warning");
                     }
 
-                    // PERHATIKAN: name input di sini harus sama dengan di controller
-                    const row = `<tr>
-                        <td class="text-center row-number">${index + 1}</td>
-                        <td><strong>${nama}</strong><br><small>${nidn}</small>
-                            <input type="hidden" name="anggota_dosen[${index}][nidn]" value="${nidn}">
-                            <input type="hidden" name="anggota_dosen[${index}][nama]" value="${nama}">
-                            <input type="hidden" name="anggota_dosen[${index}][fakultas_dosen]" value="Teknologi Informasi">
-                            <input type="hidden" name="anggota_dosen[${index}][prodi_dosen]" value="${prodi}">
-                            <input type="hidden" name="anggota_dosen[${index}][peran]" value="${peran}">
-                        </td>
-                        <td>${prodi}</td>
-                        <td><div class="role-text">${peran}</div></td>
-                        <td class="text-center"><button type="button" class="btn btn-danger btn-sm remove-row">Hapus</button></td>
-                    </tr>`;
+                    // Buat Baris Tabel Baru
+                    const row = `
+                        <tr>
+                            <td class="text-center row-number">${index + 1}</td>
+                            <td>
+                                <div class="fw-bold">${nama}</div>
+                                <div class="text-muted small">${nidn}</div>
+                                <input type="hidden" name="anggota_dosen[${index}][nidn]" value="${nidn}">
+                                <input type="hidden" name="anggota_dosen[${index}][nama]" value="${nama}">
+                                <input type="hidden" name="anggota_dosen[${index}][fakultas_dosen]" value="${fakultas}">
+                                <input type="hidden" name="anggota_dosen[${index}][prodi_dosen]" value="${prodi}">
+                                <input type="hidden" name="anggota_dosen[${index}][peran]" value="${peran}">
+                            </td>
+                            <td>${fakultas}</td>
+                            <td>${prodi}</td>
+                            <td><div class="role-text">${peran}</div></td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-danger btn-sm remove-row"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    `;
 
                     tableBody.insertAdjacentHTML('beforeend', row);
                     updateAllRoles();
+                    
+                    // Reset Form
                     document.getElementById('nidn_input').value = "";
                     document.getElementById('nama_dosen_form').value = "";
-                    document.getElementById('card-anggota-dosen').classList.remove('border',
-                        'border-danger');
+                    document.getElementById('fakultas_dosen_form').value = "";
+                    
+                    // Reset Prodi
+                    prodiSelect.innerHTML = '<option value="" selected disabled>-- Pilih Fakultas Terlebih Dahulu --</option>';
+                    prodiSelect.disabled = true;
+
+                    // Hapus Error UI
+                    document.getElementById('card-anggota-dosen').classList.remove('border', 'border-danger');
                     document.getElementById('error-anggota-dosen').classList.add('d-none');
                 });
             }
 
-            // 4. TAMBAH MAHASISWA
+            // 5. TAMBAH MAHASISWA (EXISTING)
             const btnTambahMhs = document.getElementById('btnTambahMhs');
             if (btnTambahMhs) {
                 btnTambahMhs.addEventListener('click', function() {
@@ -848,7 +935,6 @@
                         return showFloatingAlert("Mahasiswa dengan NPM ini sudah ditambahkan.", "warning");
                     }
 
-                    // PERHATIKAN: name input di sini harus sama dengan di controller
                     const row = `<tr>
                         <td class="text-center row-number">${index + 1}</td>
                         <td><strong>${nama}</strong><br><small>${npm}</small>
@@ -873,8 +959,9 @@
 
             // HAPUS ROW
             document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-row')) {
-                    const row = e.target.closest('tr');
+                if (e.target.closest('.remove-row')) {
+                    const btn = e.target.closest('.remove-row');
+                    const row = btn.closest('tr');
                     const tableBody = row.closest('tbody');
                     const isDosen = tableBody.id === 'tabelAnggotaDosen';
                     const rolePrefix = isDosen ? 'Anggota Pengusul' : 'Anggota Mahasiswa';
@@ -884,8 +971,7 @@
                         const newNum = i + 1;
                         const newRole = `${rolePrefix} ${newNum}`;
                         tr.querySelector('.row-number').innerText = newNum;
-                        if (tr.querySelector('.role-text')) tr.querySelector('.role-text')
-                            .innerText = newRole;
+                        if (tr.querySelector('.role-text')) tr.querySelector('.role-text').innerText = newRole;
                         tr.querySelectorAll('input[type="hidden"]').forEach(input => {
                             let name = input.getAttribute('name');
                             input.setAttribute('name', name.replace(/\[\d+\]/, `[${i}]`));
@@ -942,7 +1028,6 @@
                 }
             }
 
-            // PERBAIKAN: Maxlength disesuaikan dengan Controller
             setupCharacterCounter('judul', 'judul-counter', 300);
             setupCharacterCounter('abstrak', 'abstrak-counter', 500);
             setupCharacterCounter('keyword', 'keyword-counter', 150);
@@ -951,27 +1036,26 @@
             setupCharacterCounter('mitra_alamat', 'mitra_alamat-counter', 250);
             setupCharacterCounter('mitra_penanggung_jawab', 'mitra_penanggung_jawab-counter', 50);
             setupCharacterCounter('objek_pengabdian', 'objek_pengabdian-counter', 50);
-            setupCharacterCounter('lokasi_pengabdian', 'lokasi_pengabdian-counter', 100); // Max 100 (Bukan 250)
+            setupCharacterCounter('lokasi_pengabdian', 'lokasi_pengabdian-counter', 100);
             setupCharacterCounter('instasi_lain', 'instasi_lain-counter', 50);
             setupCharacterCounter('temuan_target', 'temuan_target-counter', 50);
-            setupCharacterCounter('pengesahan_kota', 'pengesahan_kota-counter', 20); // Max 20 (Bukan 30)
+            setupCharacterCounter('pengesahan_kota', 'pengesahan_kota-counter', 20);
 
-            // 9. VALIDASI SUBMIT
+            // 9. VALIDASI SUBMIT FORM UTAMA
             const formPengajuan = document.getElementById('formPengajuan');
             if (formPengajuan) {
                 formPengajuan.addEventListener('submit', function(e) {
                     let isValid = true;
                     let firstErrorElement = null;
 
-                    // --- CEK TANDA TANGAN (NEW) ---
+                    // --- CEK TANDA TANGAN ---
                     if (!hasSignature) {
-                        e.preventDefault(); 
+                        e.preventDefault();
                         e.stopPropagation();
                         var myModal = new bootstrap.Modal(document.getElementById('modalUploadSignature'));
                         myModal.show();
                         return false;
                     }
-                    // -----------------------------
 
                     // A. Required Inputs
                     const requiredInputs = formPengajuan.querySelectorAll('[required]');
@@ -1034,21 +1118,20 @@
                 });
             }
 
-            // --- LOGIKA AJAX UPLOAD TTD (FIXED) ---
+            // --- LOGIKA AJAX UPLOAD TTD ---
             const formAjaxSignature = document.getElementById('formAjaxSignature');
-            if(formAjaxSignature) {
+            if (formAjaxSignature) {
                 formAjaxSignature.addEventListener('submit', async function(e) {
-                    e.preventDefault(); // Prevent standard form submission
-                    
+                    e.preventDefault();
+
                     const fileInput = document.getElementById('ajax_tanda_tangan');
                     const errorMsg = document.getElementById('ajax-error-msg');
                     const btn = document.getElementById('btnSaveAjaxSignature');
                     const btnText = document.getElementById('btn-text-upload');
                     const btnLoader = document.getElementById('btn-loader-upload');
 
-                    if(fileInput.files.length === 0) return;
+                    if (fileInput.files.length === 0) return;
 
-                    // UI Loading
                     btn.disabled = true;
                     btnText.classList.add('d-none');
                     btnLoader.classList.remove('d-none');
@@ -1065,18 +1148,12 @@
                             body: formData
                         });
                         const result = await response.json();
-                        if(response.ok && result.success) {
-                            // 1. UPDATE STATUS VARIABLE GLOBALLY WITHOUT RELOAD
-                            hasSignature = true; 
-                            
-                            // 2. SHOW SUCCESS ALERT
+                        if (response.ok && result.success) {
+                            hasSignature = true;
                             showFloatingAlert("Tanda tangan berhasil disimpan! Silakan klik 'Ajukan' kembali.", "success");
-                            
-                            // 3. CLOSE MODAL MANUALLY
                             const modalEl = document.getElementById('modalUploadSignature');
                             const modal = bootstrap.Modal.getInstance(modalEl);
                             modal.hide();
-
                         } else {
                             throw new Error(result.message || "Gagal mengunggah gambar.");
                         }
@@ -1085,32 +1162,116 @@
                         errorMsg.textContent = error.message;
                         errorMsg.classList.remove('d-none');
                     } finally {
-                        // Reset button state
                         btn.disabled = false;
                         btnText.classList.remove('d-none');
                         btnLoader.classList.add('d-none');
                     }
                 });
             }
+            function calculateTotalBiaya() {
+                let total = 0;
+                // Hanya ambil input yang punya class 'biaya-input'
+                const inputs = document.querySelectorAll('.biaya-input');
+                
+                inputs.forEach(input => {
+                    // Hapus titik, ubah ke integer
+                    let rawValue = input.value.replace(/\./g, '');
+                    let intValue = parseInt(rawValue) || 0;
+                    total += intValue;
+                });
+
+                // Format kembali ke Rupiah untuk ditampilkan
+                const formattedTotal = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                
+                // Update field total
+                const display = document.getElementById('total_biaya_display');
+                if(display){
+                    display.value = formattedTotal;
+                }
+            }
+
+            // Pasang Event Listener ke semua input biaya
+            const biayaInputs = document.querySelectorAll('.biaya-input');
+            biayaInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    // Panggil fungsi hitung setiap kali mengetik
+                    calculateTotalBiaya();
+                });
+            });
 
             updateAllRoles();
+            calculateTotalBiaya();
         });
     </script>
 @endpush
 
 @push('styles')
     <style>
-        .btn-action-control { font-weight: 600; min-width: 120px; transition: all 0.2s ease-in-out; }
-        .btn-secondary { background-color: #6c757d; border-color: #6c757d; color: white; }
-        .btn-secondary:hover { background-color: #5a6268; border-color: #5a6268; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
-        .btn-primary { background-color: #8BC3B4; border-color: #8BC3B4; color: white; }
-        .btn-primary:hover { background-color: #6cb8a5; border-color: #6cb8a5; transform: translateY(-2px); color: white; box-shadow: 0 4px 8px rgba(139, 195, 180, 0.4); }
-        .form-control[disabled] { background-color: #e9ecef; }
-        .form-label { font-weight: 500; }
-        .btn-success { background-color: #198754; border-color: #198754; color: white; }
-        .btn-success:hover { background-color: #157347; border-color: #146c43; }
-        .btn-danger { background-color: #dc3545; border-color: #dc3545; color: white; }
-        .btn-danger:hover { background-color: #bb2d3b; border-color: #b02a37; }
-        .form-label.mb-1 { margin-bottom: 0.25rem !important; }
+        .btn-action-control {
+            font-weight: 600;
+            min-width: 120px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background-color: #8BC3B4;
+            border-color: #8BC3B4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #6cb8a5;
+            border-color: #6cb8a5;
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 4px 8px rgba(139, 195, 180, 0.4);
+        }
+
+        .form-control[disabled] {
+            background-color: #e9ecef;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-success {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #157347;
+            border-color: #146c43;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+            border-color: #b02a37;
+        }
+
+        .form-label.mb-1 {
+            margin-bottom: 0.25rem !important;
+        }
     </style>
 @endpush

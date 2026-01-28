@@ -20,7 +20,6 @@
         <div class="row">
             <div class="col-lg-8">
 
-                {{-- 1. IDENTITAS USULAN --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
                         <h6 class="fw-bold text-primary mb-0"><i class="bi bi-info-circle me-2"></i>Identitas Usulan</h6>
@@ -29,13 +28,11 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="small text-muted fw-bold">Judul Kegiatan</label>
-                                {{-- PERUBAHAN: Akses via relasi identitas --}}
                                 <p class="fs-5 fw-bold text-dark mb-0">{{ $detailProposal->identitas->judul ?? '-' }}</p>
                             </div>
                             <div class="col-md-6">
                                 <label class="small text-muted fw-bold d-block mb-1">Status Saat Ini</label>
                                 <div>
-                                    {{-- PERUBAHAN: Menggunakan Accessor Model (status_color & status_label) --}}
                                     <span class="badge bg-{{ $detailProposal->status_color }} fs-6 px-3 py-2 rounded-pill">
                                         {{ $detailProposal->status_label }}
                                     </span>
@@ -46,7 +43,6 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="small text-muted fw-bold">Skema Pengabdian</label>
-                                {{-- PERUBAHAN: Menggunakan Accessor Model (skema_label) --}}
                                 {{ $detailProposal->skemaRef->nama ?? 'Skema Tidak Ditemukan' }}
                             </div>
                             <div class="col-md-6">
@@ -65,7 +61,6 @@
                     </div>
                 </div>
 
-                {{-- 2. ABSTRAK & MITRA --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
                         <h6 class="fw-bold text-primary mb-0"><i class="bi bi-file-text me-2"></i>Substansi Kegiatan</h6>
@@ -82,7 +77,6 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="small text-muted fw-bold">Mitra Sasaran</label>
-                                {{-- PERUBAHAN: Akses via relasi atribut --}}
                                 <p class="mb-0 fw-bold">{{ $detailProposal->atribut->nama_institusi_mitra ?? '-' }}</p>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -94,13 +88,11 @@
                     </div>
                 </div>
 
-                {{-- 3. RENCANA ANGGARAN (RAB) --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
                         <h6 class="fw-bold text-primary mb-0"><i class="bi bi-cash-stack me-2"></i>Rencana Anggaran Biaya
                         </h6>
                         <span class="badge bg-success fs-6 font-monospace px-3 py-2">
-                            {{-- PERUBAHAN: Menggunakan Accessor Model (total_dana) --}}
                             Total: Rp {{ number_format($detailProposal->total_dana, 0, ',', '.') }}
                         </span>
                     </div>
@@ -112,29 +104,28 @@
                                     <th class="text-end pe-4">Biaya (Rp)</th>
                                 </tr>
                             </thead>
-                            {{-- PERUBAHAN: Akses via relasi biaya --}}
                             <tbody>
                                 <tr>
-                                    <td class="ps-4">Honor Output</td>
+                                    <td class="ps-4">Honor</td>
                                     <td class="text-end pe-4">
                                         {{ number_format($detailProposal->biaya->honor_output ?? 0, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4">Belanja Non Operasional</td>
+                                    <td class="ps-4">Biaya Inovasi</td>
                                     <td class="text-end pe-4">
                                         {{ number_format($detailProposal->biaya->belanja_non_operasional ?? 0, 0, ',', '.') }}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4">Bahan Habis Pakai</td>
-                                    <td class="text-end pe-4">
-                                        {{ number_format($detailProposal->biaya->bahan_habis_pakai ?? 0, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4">Transportasi</td>
+                                    <td class="ps-4">Perjalanan atau Transportasi</td>
                                     <td class="text-end pe-4">
                                         {{ number_format($detailProposal->biaya->transportasi ?? 0, 0, ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-4">Luaran</td>
+                                    <td class="text-end pe-4">
+                                        {{ number_format($detailProposal->biaya->lain_lain ?? 0, 0, ',', '.') }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -142,9 +133,7 @@
                 </div>
             </div>
 
-            {{-- KOLOM KANAN: PENDUKUNG --}}
             <div class="col-lg-4">
-                {{-- TIM PELAKSANA --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
                         <h6 class="fw-bold text-primary mb-0"><i class="bi bi-people me-2"></i>Tim Pelaksana</h6>
@@ -153,7 +142,6 @@
                         @foreach ($anggota as $item)
                             @php
                                 $isKetua = ($item->tipe ?? '') === 'Ketua';
-                                // Logic simple untuk inisial
                                 $inisial = $isKetua ? 'D' : 'A';
                             @endphp
                             <div class="list-group-item px-3 py-3">
@@ -178,7 +166,6 @@
                     </div>
                 </div>
 
-                {{-- FILE PROPOSAL --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body">
                         <div class="d-grid">
@@ -190,7 +177,6 @@
                     </div>
                 </div>
 
-                {{-- DOKUMEN LAMPIRAN --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
                         <h6 class="fw-bold text-primary mb-0"><i class="bi bi-paperclip me-2"></i>Dokumen Lampiran</h6>
@@ -211,7 +197,6 @@
                     </div>
                 </div>
 
-                {{-- 4. LUARAN KEGIATAN (BUTTON TRIGGER MODAL) --}}
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white border-bottom py-3">
                         <h6 class="fw-bold text-primary mb-0"><i class="bi bi-archive me-2"></i>Luaran Kegiatan</h6>
@@ -220,14 +205,12 @@
                         <p class="text-muted small mb-2">Daftar luaran yang telah diunggah:</p>
 
                         @php
-                            // Calculate counts for badges
                             $jmlArtikel = $lampiran->where('kategori', 'artikel')->count();
                             $jmlSertifikat = $lampiran->where('kategori', 'sertifikat')->count();
                             $jmlHKI = $lampiran->where('kategori', 'hki')->count();
                         @endphp
 
                         <div class="d-grid gap-2">
-                            {{-- BUTTON ARTIKEL --}}
                             <button
                                 class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
                                 data-bs-toggle="modal" data-bs-target="#modalListArtikel">
@@ -242,7 +225,6 @@
                                 </div>
                             </button>
 
-                            {{-- BUTTON SERTIFIKAT --}}
                             <button
                                 class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
                                 data-bs-toggle="modal" data-bs-target="#modalListBuku">
@@ -257,7 +239,6 @@
                                 </div>
                             </button>
 
-                            {{-- BUTTON HKI --}}
                             <button
                                 class="btn btn-outline-success border text-start d-flex justify-content-between align-items-center hover-shadow"
                                 data-bs-toggle="modal" data-bs-target="#modalListHKI">
@@ -274,8 +255,7 @@
                         </div>
                     </div>
                 </div>
-                
-                {{-- DOWNLOAD PENGESAHAN --}}
+
                 <div class="d-flex justify-content-end mt-1 mb-5">
                     <a href="{{ $detailProposal->status_progress >= 4 ? route('dosen.proposal.export_pdf', $detailProposal->id) : '#' }}"
                         class="btn btn-success btn-lg px-3 w-100 fw-bold shadow-sm"
@@ -287,9 +267,7 @@
         </div>
     </div>
 
-    {{-- MODAL LUARAN SAMA SEPERTI SEBELUMNYA --}}
     @include('shared.modal_luaran', ['lampiran' => $lampiran])
-    {{-- (Kode Modal Artikel/Buku/HKI ditaruh di sini jika Admin ingin melihatnya) --}}
 
 @endsection
 

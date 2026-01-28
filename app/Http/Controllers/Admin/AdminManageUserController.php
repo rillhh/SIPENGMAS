@@ -11,13 +11,13 @@ class AdminManageUserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::oldest(); 
+        $query = User::oldest();
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
-                  ->orWhere('nidn', 'like', "%{$search}%");
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('nidn', 'like', "%{$search}%");
             });
         }
         $perPage = $request->input('per_page', 10);
@@ -25,10 +25,9 @@ class AdminManageUserController extends Controller
             $perPage = 10;
         }
         $users = $query->paginate($perPage)->appends($request->query());
-
         return view('admin.admin_manage_user', compact('users'));
     }
-    // MENYIMPAN USER BARU
+
     public function store(Request $request)
     {
         $request->validate([
@@ -49,14 +48,14 @@ class AdminManageUserController extends Controller
         ]);
         return redirect()->back()->with('success', 'Akun berhasil ditambahkan!');
     }
-    // UPDATE USER
+
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'nidn' => 'nullable|numeric|unique:users,nidn,' . $user->id, 
+            'nidn' => 'nullable|numeric|unique:users,nidn,' . $user->id,
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username,' . $user->id,
-            'password' => 'nullable|string|min:3', 
+            'password' => 'nullable|string|min:3',
         ]);
         $data = [
             'nidn' => $request->nidn,

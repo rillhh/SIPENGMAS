@@ -12,8 +12,8 @@
                     <th class="py-3 text-secondary">Judul & Pengusul</th>
                     <th class="py-3 text-secondary">Skema & Skala</th>
                     <th class="text-center py-3 text-secondary">Tahun</th>
-                    
-                    @if($type == 'ditolak')
+
+                    @if ($type == 'ditolak')
                         <th class="py-3 text-secondary">Alasan Penolakan</th>
                     @else
                         <th class="text-center py-3 text-secondary">Dana</th>
@@ -28,23 +28,24 @@
                     <tr class="border-bottom">
                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
                         <td class="py-3" style="max-width: 350px;">
-                            <span class="fw-bold text-dark d-block text-truncate" title="{{ $prop->identitas->judul ?? '' }}">
+                            <span class="fw-bold text-dark d-block text-truncate"
+                                title="{{ $prop->identitas->judul ?? '' }}">
                                 {{ $prop->identitas->judul ?? 'Tanpa Judul' }}
                             </span>
                             <div class="small text-muted mt-1 d-flex align-items-center">
-                                <i class="bi bi-person-circle me-1"></i> 
+                                <i class="bi bi-person-circle me-1"></i>
                                 <span class="ms-1">{{ $prop->user->name ?? '-' }}</span>
                             </div>
                         </td>
-                        
+
                         {{-- MENGGUNAKAN ACCESSOR MODEL --}}
                         <td class="py-3 text-muted small fw-bold">
                             {{ $prop->skema_label }}
                         </td>
-                        
+
                         <td class="text-center py-3 fw-bold">{{ $prop->tahun_pelaksanaan }}</td>
 
-                        @if($type == 'ditolak')
+                        @if ($type == 'ditolak')
                             <td class="py-3 small text-danger text-truncate" style="max-width: 250px;">
                                 {{ $prop->feedback ?? '-' }}
                             </td>
@@ -58,9 +59,10 @@
                                 </span>
                             </td>
                         @endif
-                        
+
                         <td class="text-center py-3">
-                            <a href="{{ route('admin.rekapitulasi.detail', $prop->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
+                            <a href="{{ route('admin.rekapitulasi.detail', $prop->id) }}"
+                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
                                 Detail
                             </a>
                         </td>
@@ -69,7 +71,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-3 px-3">
         {{ $items->links('pagination::bootstrap-5') }}
     </div>

@@ -11,7 +11,7 @@ class AttributesHandler
     public function handle(LdapUser $ldap, DatabaseUser $database)
     {
         $role = $ldap->getFirstAttribute('title');
-        if ($role != 'M') { // Jika role D (Dosen), lanjutkan
+        if ($role != 'M') {
             throw ValidationException::withMessages([
                 'username' => 'Anda tidak memiliki hak akses untuk login.',
             ]);

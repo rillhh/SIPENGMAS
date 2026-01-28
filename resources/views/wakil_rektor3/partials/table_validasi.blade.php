@@ -8,25 +8,36 @@
         <table class="table align-middle mb-0">
             <thead class="bg-light">
                 <tr>
+                    {{-- KOLOM 1: NO --}}
                     <th class="ps-4 py-3 text-secondary" style="width: 50px;">No</th>
-                    <th class="py-3 text-secondary">Identitas Proposal</th>
-                    <th class="text-center py-3 text-secondary">Tahun</th>
-                    <th class="text-end py-3 text-secondary">Total Dana</th>
 
+                    {{-- KOLOM 2: JUDUL & PENGUSUL (Digabung) --}}
+                    <th class="py-3 text-secondary">Judul & Pengusul</th>
+
+                    {{-- KOLOM 3: SKEMA & TAHUN (Digabung) --}}
+                    <th class="py-3 text-secondary">Skema & Tahun</th>
+
+                    {{-- KOLOM 4: DANA --}}
+                    <th class="text-end py-3 text-secondary pe-4">Pengajuan Dana</th>
+
+                    {{-- KOLOM 5: AKSI / STATUS --}}
                     @if ($type == 'menunggu')
-                        <th class="text-center py-3 text-secondary" style="width: 180px;">Aksi</th>
+                        <th class="text-center py-3 text-secondary" style="width: 200px;">Aksi</th>
                     @else
-                        <th class="text-center py-3 text-secondary">Status</th>
+                        <th class="text-center py-3 text-secondary">Status Proposal</th>
                     @endif
 
-                    <th class="text-center py-3 text-secondary">Detail</th>
+                    {{-- KOLOM 6: DETAIL --}}
+                    <th class="text-center py-3 text-secondary" style="width: 100px;">Detail</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($items as $index => $prop)
                     <tr class="border-bottom">
+                        {{-- NO --}}
                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
 
+                        {{-- JUDUL & PENGUSUL --}}
                         <td class="py-3" style="max-width: 350px;">
                             <span class="fw-bold text-dark d-block text-truncate"
                                 title="{{ $prop->identitas->judul ?? '' }}">
@@ -38,40 +49,53 @@
                             </div>
                         </td>
 
-                        <td class="text-center py-3 fw-bold text-secondary">{{ $prop->tahun_pelaksanaan }}</td>
+                        {{-- SKEMA & TAHUN --}}
+                        <td class="py-3">
+                            <span class="d-block text-dark fw-bold small">
+                                {{ $prop->skemaRef->nama ?? '-' }}
+                            </span>
+                            <span class="text-muted small">Tahun: {{ $prop->tahun_pelaksanaan }}</span>
+                        </td>
 
+                        {{-- PENGAJUAN DANA --}}
                         <td class="text-end py-3 pe-4 fw-bold text-success font-monospace">
                             Rp {{ number_format($prop->total_dana, 0, ',', '.') }}
                         </td>
 
-                        {{-- KOLOM AKSI (DIPISAH: SETUJU & TOLAK) --}}
+                        {{-- AKSI (MENUNGGU) --}}
                         @if ($type == 'menunggu')
                             <td class="text-center py-3">
                                 <div class="d-flex justify-content-center gap-2">
                                     {{-- Tombol Terima --}}
-                                    <button class="btn btn-success btn-sm rounded-pill px-3 shadow-sm fw-bold"
+                                    {{-- ID Modal HARUS #modalApprove agar sesuai dengan modal_action.blade.php --}}
+                                    <button class="btn btn-sm btn-success rounded-pill px-3 shadow-sm fw-bold"
                                         data-bs-toggle="modal" data-bs-target="#modalApprove{{ $prop->id }}">
                                         Terima
                                     </button>
 
                                     {{-- Tombol Tolak --}}
-                                    <button class="btn btn-danger btn-sm rounded-pill px-3 shadow-sm fw-bold"
+                                    {{-- ID Modal HARUS #modalReject agar sesuai dengan modal_action.blade.php --}}
+                                    <button class="btn btn-sm btn-danger rounded-pill px-3 shadow-sm fw-bold"
                                         data-bs-toggle="modal" data-bs-target="#modalReject{{ $prop->id }}">
                                         Tolak
                                     </button>
                                 </div>
                             </td>
+                            {{-- STATUS (SELESAI/DITOLAK) --}}
                         @else
                             <td class="text-center py-3">
-                                <span class="badge bg-{{ $prop->status_color }} rounded-pill px-3">
+                                <span
+                                    class="badge bg-{{ $prop->status_color }} rounded-pill px-3 border border-{{ $prop->status_color }} bg-opacity-10 text-{{ $prop->status_color }}">
                                     {{ $prop->status_label }}
                                 </span>
                             </td>
                         @endif
 
+                        {{-- TOMBOL DETAIL --}}
                         <td class="text-center py-3">
+                            {{-- Route diarahkan ke Wakil Rektor --}}
                             <a href="{{ route('wakil_rektor.validasi.detail', $prop->id) }}"
-                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
+                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">
                                 Detail
                             </a>
                         </td>

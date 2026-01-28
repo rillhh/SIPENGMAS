@@ -11,9 +11,9 @@
                     <th class="ps-4 py-3 text-secondary" style="width: 50px;">No</th>
                     <th class="py-3 text-secondary">Judul & Pengusul</th>
                     <th class="py-3 text-secondary">Skema & Tahun</th>
-                    <th class="text-end py-3 text-secondary pe-4">Dana (Rp)</th>
-                    
-                    @if($type == 'menunggu')
+                    <th class="text-end py-3 text-secondary pe-4">Pengajuan Dana</th>
+
+                    @if ($type == 'menunggu')
                         <th class="text-center py-3 text-secondary" style="width: 200px;">Aksi</th>
                     @else
                         <th class="text-center py-3 text-secondary">Status Proposal</th>
@@ -26,13 +26,14 @@
                 @foreach ($items as $index => $prop)
                     <tr class="border-bottom">
                         <td class="ps-4 py-3 text-muted">{{ $items->firstItem() + $index }}</td>
-                        
+
                         <td class="py-3" style="max-width: 350px;">
-                            <span class="fw-bold text-dark d-block text-truncate" title="{{ $prop->identitas->judul ?? '' }}">
+                            <span class="fw-bold text-dark d-block text-truncate"
+                                title="{{ $prop->identitas->judul ?? '' }}">
                                 {{ $prop->identitas->judul ?? 'Tanpa Judul' }}
                             </span>
                             <div class="small text-muted mt-1 d-flex align-items-center">
-                                <i class="bi bi-person-circle me-1"></i> 
+                                <i class="bi bi-person-circle me-1"></i>
                                 <span class="ms-1">{{ $prop->user->name ?? 'Pengusul' }}</span>
                             </div>
                         </td>
@@ -46,7 +47,7 @@
                             {{ number_format($prop->total_dana, 0, ',', '.') }}
                         </td>
 
-                        @if($type == 'menunggu')
+                        @if ($type == 'menunggu')
                             <td class="text-center py-3">
                                 <div class="d-flex justify-content-center gap-2">
                                     {{-- PERBAIKAN: Target ID harus #modalSetuju (bukan #modalApprove) --}}
@@ -64,14 +65,16 @@
                             </td>
                         @else
                             <td class="text-center py-3">
-                                <span class="badge bg-{{ $prop->status_color }} rounded-pill px-3 border border-{{ $prop->status_color }} bg-opacity-10 text-{{ $prop->status_color }}">
+                                <span
+                                    class="badge bg-{{ $prop->status_color }} rounded-pill px-3 border border-{{ $prop->status_color }} bg-opacity-10 text-{{ $prop->status_color }}">
                                     {{ $prop->status_label }}
                                 </span>
                             </td>
                         @endif
 
                         <td class="text-center py-3">
-                            <a href="{{ route('wakil_dekan3.validasi.detail', $prop->id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">
+                            <a href="{{ route('wakil_dekan3.validasi.detail', $prop->id) }}"
+                                class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold">
                                 Detail
                             </a>
                         </td>
@@ -80,7 +83,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-3 px-3">
         {{ $items->links('pagination::bootstrap-5') }}
     </div>

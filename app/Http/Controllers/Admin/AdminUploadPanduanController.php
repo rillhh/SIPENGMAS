@@ -9,12 +9,12 @@ use App\Http\Controllers\Controller;
 class AdminUploadPanduanController extends Controller
 {
     public function store(Request $request)
-    {   
-        $request->validate([    //validate form
+    {
+        $request->validate([
             'file'         => 'required',
-            'title'         => 'required|min:1',        
-        ]);        
-        $file = $request->file('file'); //upload
+            'title'         => 'required|min:1',
+        ]);
+        $file = $request->file('file');
         $originalName = $file->getClientOriginalName();
         $file->storeAs('panduan', $originalName);
         Panduan::create([
